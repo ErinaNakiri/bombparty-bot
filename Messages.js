@@ -1,5 +1,5 @@
 var monDico = document.createElement("script");
-monDico.src = "http://dabsunter.github.io/bombparty-bot/Dictionnaire.js";
+monDico.src = "https://github.com/ErinaNakiri/bombparty-bot/blob/master/Dictionnaire.js";
 var AvertissementStockes = {
 			
 }
