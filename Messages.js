@@ -2011,7 +2011,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 		if(syllabeNiquée === 1) {
 			let b = channel.data.actorsByAuthId[a.playerAuthId]
 			let c = []
-			if(syllabeNiquée.indexOf(b.lastWord)) { 
+			if(b.lastWord.indexOf(syllabeUniques)) { 
 				syllabeUniques.forEach(function(abcd) {
 					if (abcd.indexOf(b.lastWord)>-1) { 
 						c.push(abcd)
