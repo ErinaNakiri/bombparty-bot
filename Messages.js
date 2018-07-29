@@ -10,14 +10,11 @@ var shuffle = function(a){
     }
     return a
 }
-AvertissementStockes[app.user.authId] = app.user.authId 
 AvertissementStockes[app.user.authId] = {avertissements: 0, nom: app.user.displayName, role: app.user.role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, syllabe: 0, tricheur: 0}
 var Moderation = {
 		
 }
-AvertissementStockes["google:102026776801715750701"] = "google:102026776801715750701"
 AvertissementStockes["google:102026776801715750701"] = {avertissements: 0, nom: "Erina Nakiri", role: "Administrator", unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
-Moderation["google:102026776801715750701"] = "google:102026776801715750701"
 Moderation["google:102026776801715750701"] = {avertissement: 0, nom: "Erina Nakiri", authId: "google:102026776801715750701", mod: 0, joueur: "", joueurId: "", tentative: 0, role: "Administrator", unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0}
 var change = 1
 var end = 0
@@ -50,13 +47,11 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 			c.latence = 0
 		}
 		if(AvertissementStockes[c.authId] === undefined) {
-			AvertissementStockes[c.authId] = c.authId 
 			AvertissementStockes[c.authId] = {avertissements: 0, nom: c.displayName, role: c.role, triche: 0, automod: 0, unknown: 0, unknownPlayer: "", unknownPlayerId: "", warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
 			talk("Le joueur " + AvertissementStockes[c.authId].nom + " n'avait pas de base de donnée. Elle a été créée avec succès.")
 		}
 		if (c.role === "moderator" || c.role === "host" ) {
 			if (Moderation[c.authId] === undefined) {
-				Moderation[c.authId] = c.authId
 				Moderation[c.authId] = {avertissement: 0, nom: c.displayName, authId: c.authId, mod: 0, joueur: "", joueurId: "", tentative: 0, role:c.role, unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0}
 				AvertissementStockes[c.authId].role = "moderator"
 				if (c.role === "moderator") {
@@ -1980,10 +1975,8 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 		}
 		if(AvertissementStockes[b.authId] === undefined) {
 			if (a.authId.includes("guest:") === true) {
-				AvertissementStockes[b.authId] = b.authId 
 				AvertissementStockes[b.authId] = {avertissements: 2, nom: a.displayName, role: a.role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
 			} else {
-				AvertissementStockes[b.authId] = b.authId 
 				AvertissementStockes[b.authId] = {avertissements: 0, nom: a.displayName, role: a.role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
 			talk("Le joueur " + AvertissementStockes[b.authId].nom + " est arrivé. C'est la première fois que l'on voit ce joueur.")
 			}
@@ -2049,10 +2042,8 @@ var i = 0
 var j = 0
 if (j === 0) {
 	for(i = 0; i < channel.data.users.length; i++) {
-		AvertissementStockes[channel.data.users[i].authId] = channel.data.users[i].authId
 		AvertissementStockes[channel.data.users[i].authId] = {avertissements: 0, nom: channel.data.users[i].displayName, role: channel.data.users[i].role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
 		if(channel.data.users[i].role === "host" || channel.data.users[i] === "moderator") {
-			Moderation[channel.data.users[i].authId] = channel.data.users[i].authId
 			Moderation[channel.data.users[i].authId] = {avertissement: 0, nom: channel.data.users[i].displayName, authId: channel.data.users[i].authId, mod: 0, joueur: "", joueurId: "", tentative: 0, role: channel.data.users[i].role, unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0, tricheur: 0}
 		}
 		if(channel.data.users[i].authId.includes("facebook:") === true) {
