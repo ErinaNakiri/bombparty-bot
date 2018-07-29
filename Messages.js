@@ -106,7 +106,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 				if(a.text === "O") {
 					talk("La fonction a bien été activée !")
 					aide = 1
-					syllabeUniques = -1
+					syllabeNiquée = -1
 				} else if(a.text === "N") {
 					talk("La fonction a bien été désactivée !")
 					aide = 0
@@ -1755,6 +1755,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 						talk("Souhaitez-vous désactiver le programme de syllabes niquées ? (O/N)")
 						Moderation[c.authId].change = 8
 						Moderation[c.authId].tentative = 0
+					}
 				}else if (a.text === 0) {
 					talk("L'action a bien été annulée.")
 					Moderation[c.authId].change = 0
@@ -2023,7 +2024,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 						c.push(abcd)
 						AvertissementStockes[c.authId].syllabe += 1
 					}
-				}
+				})
 				if(c === 1) {
 					talk(b.displayName + " a niqué la syllabe " + c + " ! [" + AvertissementStockes[c.authId].syllabe + "]")
 					c = []
