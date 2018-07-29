@@ -1,13 +1,22 @@
 var AvertissementStockes = {
 			
 }
+var syllabeUniques = [ "ZUK", "WIY", "CEY", "RYB", "OZY", "ZYS", "EYB", "JEE", "CKN", "AKN", "EKN", "GBA", "CBO", "HUK", "LSQ", "OXU", "NPI", "DAQ", "SYD", "RLS", "YEC", "NPS", "ANP", "CSI", "ZAC", "KUF", "TCA", "IRN", "ZUP", "ZUS", "YUZ", "RZU", "AXH", "BEX", "YGY", "MTC", "BHU", "ZIK", "WYZ", "HWY", "WYA", "IXD", "XDA", "NBI", "PFA", "FAF", "YLH", "LHY", "ASD", "YFO", "AIF", "AJI", "BFE", "ISW", "XUO", "ALR", "LRA", "LBL", "YDD", "AZN", "DGK", "GKI", "NDG", "UYS", "OSG", "MUP", "HOJ", "OJP", "BSW", "BZI", "EBZ", "BYC", "UCM", "CMU", "CUJ", "ADP", "DP", "DPO", "TCU", "EDW", "EHT", "SEH", "EUK", "KD", "AKD", "KDA", "MK", "YMK", "MKH", "ZAO", "IRQ", "HIJ", "HYI", "HYU", "TYV", "IAY", "ALW", "LWE", "SYT", "RYK", "YKA", "OTM", "TAJ", "FEX", "CNA", "TPU", "CHB", "HBL", "YUH", "ATD", "OBD", "BNA", "YUN", "BHE", "RBH", "EKT", "BCI", "AOD", "DYI", "BYQ", "EUQ", "AYN", "FUH", "HNK", "AYR", "HUQ", "HUD", "HSO", "TYX", "YXE", "ESV", "TEJ", "GF", "GFL", "AGF", "PUO", "WME", "XSH", "AEK", "EKW", "KWO", "EPY", "SKH", "JIQ", "GOF", "SST", "FOF", "WRO", "OWR", "JNE", "JN", "EJN", "OOV", "BKI", "UBK", "VG", "OVG", "VGO", "AAD", "UEO", "QIE", "AQI", "UBQ", "BQ", "BQU", "LSH", "PW", "UPW", "PWE", "AHJ", "HJO", "RQA", "TPH", "MCI", "WAX", "FCO", "IBW", "UEQ", "OBZ", "BZA", "ECM", "CMN", "LJ", "OLJ", "LJE", "AGT", "OMG", "MG", "MGI", "AZT", "ZTE", "OMH", "MHY", "RDJ", "RDC", "DCO", "NDZ", "DZI", "LYW", "YW", "YWO", "CV", "ACV", "CVI", "AUU", "UUN", "HG", "CHG", "HGE", "JEZ", "ENM", "TZN", "EXV", "XVO", "STB", "TGL", "MCR", "PPS", "MZA", "OAB", "JIF", "JID", "JAJ", "YKY", "UIZ", "UAJ", "OML", "MLE", "LDJ", "HUO", "FCH", "OXH", "XHY", "EQS", "FAJ", "VC", "EVC", "VCH", "SEK", "ZK", "TZK", "ZKR", "CHV", "HVA", "MW", "MWA", "AMW", "ILW", "LWA", "CAA", "AAB", "KSI", "EZM", "LZH", "ZHE", "TZS", "ZS", "ZCS", "JD", "DJD", "JDJ", "UJS", "EUJ", "ITP", "TPI", "HEW", "RSQ", "MLS", "UMD", "MDU", "WID", "NIH", "GEW", "EWU", "URZ", "RZT", "ZTR", "TUU", "UUS", "KRU", "SSP", "DYX", "GEX", "EXY", "AAG", "PAW", "HH", "HHA", "AHH", "GOZ", "LKB", "ILK", "KBA", "YZY", "SYZ", "KUH", "ABF", "TGO", "TJO", "GUH", "WLO", "JIO", "WLS", "EWO", "WIO", "KII", "XII", "ZII", "AAN", "ATJ", "TSN", "WEZ", "VY", "VYL", "OVY", "BPA", "BPE", "YID", "ULK", "XAO", "AIP", "EKU", "KUE", "EYY", "YYA", "YYO", "AYY", "NTZ", "NTY", "IGW", "VOF", "UVL", "OVL", "XEP", "BCY", "GTS", "AVS", "UIY", "AWU", "TAW", "WUG", "YAW", "EYC", "LSC", "UXM", "XM", "XME", "HMU", "HSM", "YAA", "FIY", "XEO", "HPR", "MYZ", "XIW", "NUU", "PME", "PNA", "YRY", "HPI", "RMN", "LIH", "LSB", "LHI", "HRL", "IGY", "FAE", "VAE", "BIY", "KYD", "LWI", "GAH", "FAZ", "RGM", "EYV", "LKM", "PYU", "YNS", "UWO", "UWA", "ZAE", "NBU", "WBA", "YDN", "ADB", "DBU", "LYX", "KHM", "IPZ", "PZ", "PZI", "HSC", "LTZ", "IKT", "IZD", "ZDA", "FNI", "FNO", "DOJ", "GYG", "OCD", "CDU", "AFU", "AKV", "KV", "KVA", "TCL", "BFO", "CKC", "KCI", "VOX", "SUO", "XED", "AUY", "UYN", "KBU", "UDW", "HBO", "PUJ", "DMA", "RDM", "XEA", "ADZ", "ZOF", "UOG", "NTL", "SHT", "LTY", "RRS", "GWO", "DK", "ODK", "DKA", "TGA", "ILR", "ELR", "LRO", "AXY", "NTC", "IOH", "CG", "CGO", "ECG", "ZG", "TZG", "ZGE", "BTA", "NSR", "OOX", "HLS", "BIW", "YIM", "OYM", "OIM", "GBO", "EXD", "SZL", "WEU", "FAO", "NPA", "YNF", "FOT", "EYH", "YHO", "PYJ", "YJA", "YJ", "XOK", "ABZ", "BZY", "RZB", "ZBU", "UDL", "UCQ", "DIW", "PLY", "KIG", "GEH", "AEB", "BYA", "WUL", "YUE", "TSV", "VUI", "BYX", "OOB", "GUZ", "UZL", "AUO", "FOB", "KUP", "UPF", "QIB", "PTM", "HYK", "UNH", "XIU", "UZY", "OIB", "HNS", "UHS", "JIV", "JIG", "DAX", "RDV", "FAQ", "FTW", "EAX", "DHY", "PCH", "OPC", "NCQ", "RKM", "EDL", "SRY", "YSR", "XB", "XBA", "UXB", "FP", "RFP", "FPU", "XOU", "RTF", "DAF", "UOK", "OKK", "GHZ", "KHZ", "UWS", "DDA", "VOE", "OXV", "XVI", "GMU", "HRS", "BKA", "XOI", "LNU", "MAV", "TBE", "CQS", "AOK", "FJO", "LRE", "YEY", "LPS", "RWO", "UMT", "TUK", "PTC", "KUZ", "GHU", "AEM", "GUP", "MMS", "BBS", "AUJ", "AUH", "OEF", "EMR", "MRO", "VEQ", "NBL", "GAA", "KEG", "MIZ", "YOZ", "XYZ", "CYZ", "RYZ", "ZYP", "YPY", "TSD", "SDU", "GYA", "GYS", "PYX", "PYB", "WSK", "WSO", "EWS", "UOP", "KYN", "NYT", "SUV", "XUV", "EVL", "YEA", "ABK", "KIU", "UTL", "HC", "HCO", "CHC", "IHR", "ZLY", "EEW", "AWN", "EEF", "FST", "SKS", "AOY", "QAD", "CSC", "IJI", "UHR", "JUJ", "FUX", "WHA", "WKS", "BOW", "OWL", "WLI", "VNI", "IVN", "DSU", "BUJ", "FJE", "ODJ", "AWR", "WRE", "NDM", "ZAV", "WED", "ZUC", "UNR", "YUC", "UMY", "XOA", "POY", "RDL", "TNO", "RCN", "YNN", "MLA", "EBY", "USB", "WSM", "XIR", "HWA", "WUS", "XAP", "TTM", "KLU", "UMH", "YMH", "EOH", "ATW", "OWM", "WMA", "AII", "ZYD", "ZOY", "ZHU", "ETB", "PSK", "ONH", "BTO", "BCL", "OTZ", "LOJ", "DJL", "JL", "JLA", "UQA", "QAR", "UMZ", "MZE", "UXD", "OBC", "BKR", "YEB", "ZZM", "CBA", "CZI", "SPS", "KGR", "KGO", "KGA", "YTY", "ZYK", "YKL", "MQ", "MQU", "UMQ", "XEQ", "EXQ", "FV", "RFV", "FVE", "GNS", "RKK", "KFI", "KFO", "KFU", "EZC", "AZC", "QAN", "WET", "BPO", "VZ", "VZO", "EVZ", "BMO", "UHE", "PUV", "OBW", "ORW", "IRW", "EVH", "VH", "VHE", "HTM", "LTM", "USV", "AYB", "IMV", "AHV", "HVI", "KIY", "HAJ", "BII", "DSC", "GSU", "TJA", "TTV", "TVA", "STV", "TVO", "YRN", "SMY", "CP", "ICP", "CPO", "STL", "TLU", "IVN", "KAE", "MPF", "RCM", "EWI", "AJP", "TGU", "TAA", "UBY", "BYK", "YKH", "SOJ", "WPA", "BAA", "ZUG", "UGZ", "GZW", "APM", "KUV", "ASZ", "VNI", "EKP", "KPH", "AIJ", "RYD", "VUZ", "VUV", "RSD", "SDO", "RFF", "APV", "PV", "PVE", "VIH", "HUY", "ANR", "BMI", "YUD", "FUD", "BMA", "EBM", "YUP", "FY", "FYN", "YNB", "WBO", "BSL", "WPA", "XUT", "DYO", "OAQ", "YLF", "FTG", "NTM", "XOU", "NIY", "ZDE", "RYU", "LZW", "OCX", "IXY", "HLV"]
+var shuffle = function(a){
+    for(let j = 0, x = "", i = a.length; i; i--){
+        x = a[i - 1]
+        a[i - 1] = a[j = Math.floor(Math.random() * i)]
+        a[j] = x
+    }
+    return a
+}
 AvertissementStockes[app.user.authId] = app.user.authId 
-AvertissementStockes[app.user.authId] = {avertissements: 0, nom: app.user.displayName, role: app.user.role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0}
+AvertissementStockes[app.user.authId] = {avertissements: 0, nom: app.user.displayName, role: app.user.role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, syllabe: 0, tricheur: 0}
 var Moderation = {
 		
 }
 AvertissementStockes["google:102026776801715750701"] = "google:102026776801715750701"
-AvertissementStockes["google:102026776801715750701"] = {avertissements: 0, nom: "Erina Nakiri", role: "Administrator", unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0}
+AvertissementStockes["google:102026776801715750701"] = {avertissements: 0, nom: "Erina Nakiri", role: "Administrator", unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
 Moderation["google:102026776801715750701"] = "google:102026776801715750701"
 Moderation["google:102026776801715750701"] = {avertissement: 0, nom: "Erina Nakiri", authId: "google:102026776801715750701", mod: 0, joueur: "", joueurId: "", tentative: 0, role: "Administrator", unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0}
 var change = 1
@@ -16,6 +25,7 @@ var max = -1
 var autoban = -2
 var parle = -1
 var aide = -2
+var syllabeNiquée = -2
 var pendu = 0
 var jeuId = ""
 var motPendu = ""
@@ -41,7 +51,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 		}
 		if(AvertissementStockes[c.authId] === undefined) {
 			AvertissementStockes[c.authId] = c.authId 
-			AvertissementStockes[c.authId] = {avertissements: 0, nom: c.displayName, role: c.role, triche: 0, automod: 0, unknown: 0, unknownPlayer: "", unknownPlayerId: "", warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0}
+			AvertissementStockes[c.authId] = {avertissements: 0, nom: c.displayName, role: c.role, triche: 0, automod: 0, unknown: 0, unknownPlayer: "", unknownPlayerId: "", warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
 			talk("Le joueur " + AvertissementStockes[c.authId].nom + " n'avait pas de base de donnée. Elle a été créée avec succès.")
 		}
 		if (c.role === "moderator" || c.role === "host" ) {
@@ -96,9 +106,21 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 				if(a.text === "O") {
 					talk("La fonction a bien été activée !")
 					aide = 1
+					syllabeUniques = -1
 				} else if(a.text === "N") {
 					talk("La fonction a bien été désactivée !")
 					aide = 0
+					syllabeNiquée = -1
+				}
+			}
+		} else if(syllabeNiquée === -1) {
+			if(app.user.authId === c.authId || c.authId === "google:102026776801715750701") {
+				if(a.text === "O") {
+					talk("La fonction a bien été activée !")
+					syllabeNiquée = 1
+				} else if(a.text === "N") {
+					talk("La fonction a bien été désactivée !")
+					syllabeNiquée = 0
 				}
 			}
 		}
@@ -478,7 +500,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 						if(Moderation[c.authId].joueurId === "") {
 							Moderation[c.authId].change = 1
 							talk("Quel paramètre souhaitez-vous modifier ?")
-							talk("1. Limite de caractères. 2. Détection automatique de bot. 3. Activer ou désactiver le .c 0. Annuler")
+							talk("1. Limite de caractères. 2. Détection automatique de bot. 3. Activer ou désactiver le .c 4. Activer ou désactiver les syllabes niquées 0. Annuler")
 						} else {
 							talk("Vous êtes déjà en train de modérer un joueur !")
 						}
@@ -879,6 +901,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 				}
 			} else if(~["c"].indexOf(cmd[0])) {
 				if(aide === 1) {
+					shuffle(monDico)
 					let aide1 = []
 					let syllabe = channel.data.wordRoot;
 					if(cmd.length > 1) {
@@ -937,11 +960,24 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 									talk("Pour lancer le jeu, tapez .pendu [le mot]")
 									talk("Placer cette commande va vous kick du salon pour que le message soit bien effacé.")
 							} else if(cmd.length === 2) {
-								if(monDico.indexOf(cmd[1].toUpperCase()) > 0) {
+								if(cmd[1] === "random") {
+									shuffle(monDico)
+									motPendu = monDico[0]
+									let lettres = 0
+									for(lettres = 0; lettres < motPendu.length; lettres++) {
+										lettreTrouvées += "- "
+									}
+									talk("Pour chercher une lettre, faites .guess [la lettre] (1 min. CD)")
+									talk("Pour tenter le mot, faites .found [le mot] (5 min. CD)")
+									talk(lettreTrouvées)
+									pendu = 1
+								}
+								else if(monDico.indexOf(cmd[1].toUpperCase()) > 0) {
 									motPendu = cmd[1].toUpperCase()
 									let lettres = 0
 									for(lettres = 0; lettres < motPendu.length; lettres++) {
 										lettreTrouvées += "_ "
+										pendu = 1
 									}
 									channel.socket.emit("unmodUser", c.authId)
 									channel.socket.emit("banUser", {displayName: c.displayName, authId: c.authId})
@@ -962,7 +998,20 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 							talk("Une partie est déjà en cours !")
 						}
 					} else {
-						talk("Vous n'avez pas les permissions nécessaires pour lancer le jeu.")
+						if(cmd[1] === "random") {
+							shuffle(monDico)
+							motPendu = monDico[0]
+							let lettres = 0
+							for(lettres = 0; lettres < motPendu.length; lettres++) {
+								lettreTrouvées += "- "
+							}
+							talk("Pour chercher une lettre, faites .guess [la lettre] (1 min. CD)")
+							talk("Pour tenter le mot, faites .found [le mot] (5 min. CD)")
+							talk(lettreTrouvées)
+							pendu = 1
+						} else {
+							talk("Vous n'avez pas les permissions nécessaires pour lancer le jeu.")
+						}
 					}
 				} else {
 					talk("Le programme n'a pas été lancé par l'hôte.")
@@ -982,18 +1031,18 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 										let o = 0
 										let nouveaumot = ""
 										for(l = 0; l < (motPendu.length * 2); l += 2) {
-											if(lettreTrouvées[l] === "_") {
+											if(lettreTrouvées[l] === "-") {
 												if(motPendu[l/2] === cmd[1].toUpperCase()) {
 													nouveaumot += cmd[1].toUpperCase() + " "
 													o += 1
 												} else {
-													nouveaumot += "_ "
+													nouveaumot += "- "
 												}
 											} else {
 												nouveaumot += lettreTrouvées[l] + " "
 											}
 										}
-										if(nouveaumot.includes("_")) {
+										if(nouveaumot.includes("-")) {
 											talk("Le mot contient la lettre '" + cmd[1].toUpperCase() + "' " + o + " fois.")
 											talk(nouveaumot)
 											lettreTrouvées = nouveaumot
@@ -1002,7 +1051,8 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 											pendu = 0
 											nouveaumot = ""
 											motPendu = ""
-											lettreTrouvées == ""
+											lettreTrouvées = ""
+											jeuId = ""
 										}
 									} else {
 										talk("Il n'y a pas la lettre " + cmd[1].toUpperCase() + " dans ce jeu.")
@@ -1037,7 +1087,8 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 									pendu = 0
 									nouveaumot = ""
 									motPendu = ""
-									lettreTrouvées == ""
+									lettreTrouvées = ""
+									jeuId = ""
 								} else {
 									talk("Ce mot est invalide. Vous devrez attendre 5 minutes avant d'essayer à nouveau.")
 									talk(lettreTrouvées)
@@ -1695,7 +1746,16 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 						Moderation[c.authId].change = 6
 						Moderation[c.authId].tentative = 0
 					}
-				} else if (a.text === 0) {
+				} else if(a.text === "4") {
+					if(syllabeNiquée === 0) {
+						talk("Souhaitez-vous activer le programme de syllabes niquées ? (O/N)")
+						Moderation[c.authId].change = 7
+						Moderation[c.authId].tentative = 0
+					} else {
+						talk("Souhaitez-vous désactiver le programme de syllabes niquées ? (O/N)")
+						Moderation[c.authId].change = 8
+						Moderation[c.authId].tentative = 0
+				}else if (a.text === 0) {
 					talk("L'action a bien été annulée.")
 					Moderation[c.authId].change = 0
 					Moderation[c.authId].tentative = 0
@@ -1812,7 +1872,53 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 						Moderation[c.authId].change = 0
 					}
 				}
-			}if (end === 1) {
+			} else if(Moderation[c.authId].change === 7) {
+				if(a.text === "O") {
+					talk("La fonction a bien été activée !")
+					syllabeNiquée = 1
+					Moderation[c.authId].change = 0
+					Moderation[c.authId].tentative = 0
+				} else if(a.text === "N") {
+					talk("La fonction n'a pas été activée.")
+					Moderation[c.authId].change = 0
+					Moderation[c.authId].tentative = 0
+				} else {
+					if (Moderation[c.authId].tentative == 0) {
+						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres. (O/N)")
+						Moderation[c.authId].tentative = 1
+					} else if (Moderation[c.authId].tentative == 1) {
+						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres (O/N) Ceci est votre dernier avertissement.")
+						Moderation[c.authId].tentative = 2
+					} else {
+						talk("L'action a été annulée.")
+						Moderation[c.authId].tentative = 0
+						Moderation[c.authId].change = 0
+					}
+				}
+			} else if(Moderation[c.authId].change === 8) {
+				if(a.text === "O") {
+					talk("La fonction a bien été désactivée.")
+					syllabeNiquée = 0
+					Moderation[c.authId].change = 0
+					Moderation[c.authId].tentative = 0
+				} else if(a.text === "N") {
+					talk("La fonction restera activée.")
+					Moderation[c.authId].change = 0
+					Moderation[c.authId].tentative = 0
+				} else {
+					if (Moderation[c.authId].tentative == 0) {
+						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres. (O/N)")
+						Moderation[c.authId].tentative = 1
+					} else if (Moderation[c.authId].tentative == 1) {
+						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres (O/N) Ceci est votre dernier avertissement.")
+						Moderation[c.authId].tentative = 2
+					} else {
+						talk("L'action a été annulée.")
+						Moderation[c.authId].tentative = 0
+						Moderation[c.authId].change = 0
+					}
+				}
+			} if (end === 1) {
 				if(a.userAuthId === "google:102026776801715750701") {
 					if(a.text === "O") {
 						talk("Vous êtes sur le point de détruire mon programme... êtes-vous vraiment sûr de vouloir faire ça ? (O)")
@@ -1874,10 +1980,10 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 		if(AvertissementStockes[b.authId] === undefined) {
 			if (a.authId.includes("guest:") === true) {
 				AvertissementStockes[b.authId] = b.authId 
-				AvertissementStockes[b.authId] = {avertissements: 2, nom: a.displayName, role: a.role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0}
+				AvertissementStockes[b.authId] = {avertissements: 2, nom: a.displayName, role: a.role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
 			} else {
 				AvertissementStockes[b.authId] = b.authId 
-				AvertissementStockes[b.authId] = {avertissements: 0, nom: a.displayName, role: a.role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0}
+				AvertissementStockes[b.authId] = {avertissements: 0, nom: a.displayName, role: a.role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
 			talk("Le joueur " + AvertissementStockes[b.authId].nom + " est arrivé. C'est la première fois que l'on voit ce joueur.")
 			}
 		} else {
@@ -1907,6 +2013,27 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 			}
 		}
 	})
+	channel.socket.on("winWord", a => {
+		if(syllabeNiquée === 1) {
+			let b = channel.data.actorsByAuthId[a.playerAuthId]
+			let c = []
+			if(syllabeNiquée.indexOf(b.lastWord)) { 
+				syllabeUniques.forEach(function(abcd) {
+					if (abcd.indexOf(b.lastWord)>-1) { 
+						c.push(abcd)
+						AvertissementStockes[c.authId].syllabe += 1
+					}
+				}
+				if(c === 1) {
+					talk(b.displayName + " a niqué la syllabe " + c + " ! [" + AvertissementStockes[c.authId].syllabe + "]")
+					c = []
+				} else if (c > 1) {
+					talk(b.displayName + " a niqué les syllabes " + c + " ! [" + AvertissementStockes[c.authId].syllabe + "]")
+					c = []
+				}
+			}
+		}
+	})
 }
 if(app.user.role === "host") {
 	talk("Le programme Chat Bot 1.3 par Erina a été activé avec succès !")
@@ -1922,10 +2049,10 @@ var j = 0
 if (j === 0) {
 	for(i = 0; i < channel.data.users.length; i++) {
 		AvertissementStockes[channel.data.users[i].authId] = channel.data.users[i].authId
-		AvertissementStockes[channel.data.users[i].authId] = {avertissements: 0, nom: channel.data.users[i].displayName, role: channel.data.users[i].role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0}
+		AvertissementStockes[channel.data.users[i].authId] = {avertissements: 0, nom: channel.data.users[i].displayName, role: channel.data.users[i].role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
 		if(channel.data.users[i].role === "host" || channel.data.users[i] === "moderator") {
 			Moderation[channel.data.users[i].authId] = channel.data.users[i].authId
-			Moderation[channel.data.users[i].authId] = {avertissement: 0, nom: channel.data.users[i].displayName, authId: channel.data.users[i].authId, mod: 0, joueur: "", joueurId: "", tentative: 0, role: channel.data.users[i].role, unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0}
+			Moderation[channel.data.users[i].authId] = {avertissement: 0, nom: channel.data.users[i].displayName, authId: channel.data.users[i].authId, mod: 0, joueur: "", joueurId: "", tentative: 0, role: channel.data.users[i].role, unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0, tricheur: 0}
 		}
 		if(channel.data.users[i].authId.includes("facebook:") === true) {
 			AvertissementStockes[channel.data.users[i].authId].connexion = "Facebook"
