@@ -104,10 +104,12 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 			if(app.user.authId === c.authId || c.authId === "google:102026776801715750701") {
 				if(a.text === "O") {
 					talk("La fonction a bien été activée !")
+					talk("Souhaitez-vous activer les syllabes niquées ?")
 					aide = 1
 					syllabeNiquée = -1
 				} else if(a.text === "N") {
 					talk("La fonction a bien été désactivée !")
+					talk("Souhaitez-vous activer les syllabes niquées ?")
 					aide = 0
 					syllabeNiquée = -1
 				}
