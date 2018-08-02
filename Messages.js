@@ -2022,13 +2022,13 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 			syllabeUniques.forEach(function(abcd) {
 				if (b.lastWord.indexOf(abcd)>-1) { 
 					c.push(abcd)
-					AvertissementStockes[c.authId].syllabe += 1
+					AvertissementStockes[a.playerAuthId].syllabe += 1
 			}})
 			if(c === 1) {
-				talk(b.displayName + " a niqué la syllabe " + c + " ! [" + AvertissementStockes[c.authId].syllabe + "]")
+				talk(b.displayName + " a niqué la syllabe " + c + " ! [" + AvertissementStockes[a.playerAuthId].syllabe + "]")
 				c = []
 			} else if (c > 1) {
-				talk(b.displayName + " a niqué les syllabes " + c + " ! [" + AvertissementStockes[c.authId].syllabe + "]")
+				talk(b.displayName + " a niqué les syllabes " + c + " ! [" + AvertissementStockes[a.playerAuthId].syllabe + "]")
 				c = []
 			}
 		}
