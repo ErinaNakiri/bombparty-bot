@@ -2023,13 +2023,12 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 					c.push(abcd)
 					AvertissementStockes[c.authId].syllabe += 1
 			}})
-				if(c === 1) {
-					talk(b.displayName + " a niqué la syllabe " + c + " ! [" + AvertissementStockes[c.authId].syllabe + "]")
-					c = []
-				} else if (c > 1) {
-					talk(b.displayName + " a niqué les syllabes " + c + " ! [" + AvertissementStockes[c.authId].syllabe + "]")
-					c = []
-				}
+			if(c === 1) {
+				talk(b.displayName + " a niqué la syllabe " + c + " ! [" + AvertissementStockes[c.authId].syllabe + "]")
+				c = []
+			} else if (c > 1) {
+				talk(b.displayName + " a niqué les syllabes " + c + " ! [" + AvertissementStockes[c.authId].syllabe + "]")
+				c = []
 			}
 		}
 	})
