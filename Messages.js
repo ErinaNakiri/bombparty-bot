@@ -1289,7 +1289,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 						AvertissementStockes[c.authId].unknownPlayerId = []
 						AvertissementStockes[c.authId].unmod = 0
 					}
-				} else if (AvertissementStockes[c.authId].automod === 1) {
+				} else if (AvertissementStockes[c.authId].unkautomod === 1) {
 					if(AvertissementStockes[AvertissementStockes[c.authId].unknownPlayerId[Number(a.text) - 1]].unkautomod === 0) {
 						channel.socket.emit("modUser", {displayName: AvertissementStockes[c.authId].unknownPlayer[Number(a.text) - 1], authId: AvertissementStockes[c.authId].unknownPlayerId[Number(a.text) - 1]})
 						talk("Le joueur " + AvertissementStockes[c.authId].unknownPlayer[Number(a.text) - 1] + " est désormais auto-modérateur.")
