@@ -19,11 +19,6 @@ var Moderation = {
 var monDico = document.createElement("script");
 monDico.src = "https://rawgit.com/ErinaNakiri/bombparty-bot/master/Dictionnaire.js";
 document.head.appendChild(monDico)
-
-AvertissementStockes["google:102026776801715750701"] = {avertissements: 0, nom: "Erina Nakiri", role: "Administrator", unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
-Moderation["google:102026776801715750701"] = {avertissement: 0, nom: "Erina Nakiri", authId: "google:102026776801715750701", mod: 0, joueur: "", joueurId: "", tentative: 0, role: "Administrator", unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0}
-AvertissementStockes["steam:76561198310476181"] = {avertissements: 0, nom: "fruhlingsanfang", role: "Administrator", unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
-Moderation["steam:76561198310476181"] = {avertissement: 0, nom: "fruhlingsanfang", authId: "steam:76561198310476181", mod: 0, joueur: "", joueurId: "", tentative: 0, role: "Administrator", unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0}
 var change = 1
 var end = 0
 var max = -1
@@ -308,11 +303,15 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 							if(AvertissementStockes[user[0].authId].avertissements < 3) {
 								talk("J'ai averti ce joueur pour vous.")
 							} else {
-								if(user[0].role === "moderator") {
+								if(AvertissementStockes[user[0].authId].role === "moderator") {
 									if(app.user.authId === user[0].authId) {
-										talk("Ce joueur est hôte du programme...")
-										talk("Êtes-vous sûr de vouloir bannir l'hôte ? (O)")
-										end = 1
+										if(AvertissementStockes[user[0]].role != "Administrator") {
+											talk("Ce joueur est hôte du programme...")
+											talk("Êtes-vous sûr de vouloir bannir l'hôte ? (O)")
+											end = 1
+										} else { 
+											talk("Vous ne pouvez pas bannir un autre Administrateur.")
+										}
 									} else if (app.user.role === "host") {
 										channel.socket.emit("unmodUser", user[0].authId)
 										channel.socket.emit("banUser", {displayName: user[0].displayName, authId: user[0].authId})
@@ -321,9 +320,13 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 									}
 								} else if(user[0].role === "host") {
 									if(app.user.authId === user[0]) {
-										end = 1
-										talk("Ce joueur est hôte de la partie... Pour le bannir, nous devons user des méthodes de contournement, ce qui va détruire mon programme...")
-										talk("Êtes-vous sûr de vouloir bannir l'hôte ? (O)")
+										if(AvertissementStockes[user[0].authId].role != "Administrator") {
+											end = 1
+											talk("Ce joueur est hôte de la partie... Pour le bannir, nous devons user des méthodes de contournement, ce qui va détruire mon programme...")
+											talk("Êtes-vous sûr de vouloir bannir l'hôte ? (O)")
+										} else {
+											talk("Vous ne pouvez pas bannir un autre Administrateur.")
+										}
 									} else {
 										talk("Je n'ai pas pu bannir ce joueur...")
 									}
@@ -588,8 +591,12 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 					if(user.length) {
 						if(user[0].role === "host") {
 							if(app.user.authId === user[0].authId) {
-								talk("Le joueur est hôte. Pour le bannir, il me faudra user des méthodes de contournement. Êtes-vous sûr de vouloir procéder ? (O)")
-								end = 1
+								if(AvertissementStockes[user[0].authId != "Administrator") {
+									talk("Le joueur est hôte. Pour le bannir, il me faudra user des méthodes de contournement. Êtes-vous sûr de vouloir procéder ? (O)")
+									end = 1
+								} else {
+									talk("Vous ne pouvez pas bannir un autre Administrateur.")
+								}
 							} else {
 								talk("Je n'ai pas pu bannir ce joueur.")
 							}
@@ -599,8 +606,11 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 								channel.socket.emit("banUser", {displayName: user[0].displayName, authId: user[0].authId})
 								talk("J'ai bien banni le joueur demandé.")
 							} else if (app.user.authId === user[0].authId) {
-								talk("Le joueur est hôte du programme. Êtes-vous sûre de vouloir le bannir ? (O)")
-								end = 1
+								if(AvertissementStockes[user[0].authId].role != "Administrator") {
+									talk("Le joueur est hôte du programme. Êtes-vous sûre de vouloir le bannir ? (O)")
+									end = 1
+								} else {
+									talk("Vous ne pouvez pas bannir un autre administrateur.")
 							} else {
 								talk("Je n'ai pas pu bannir ce joueur...")
 							}
@@ -1161,8 +1171,12 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 				} else {
 					if(AvertissementStockes[c.authId].role === "Administrator") {
 						if(app.user.authId === user[0].authId) {
-							talk("Vous êtes sur le point de kick le lanceur de mon programme ! Êtes-vous sûre de vouloir procéder ? (O)")
-							end = 1
+							if(AvertissementStockes[user[0].authId].role === "Administrator") {
+								talk("Vous êtes sur le point de kick le lanceur de mon programme ! Êtes-vous sûre de vouloir procéder ? (O)")
+								end = 1
+							} else {
+								talk("Vous ne pouvez pas bannir un autre Administrateur.")
+							}
 						} else if(user[0].role === "moderator") {
 							if(app.user.role === "host") {
 								talk("Êtes-vous sûre de vouloir kick " + user[0].displayName + " ? Il est modérateur. (O/N)")
@@ -1215,8 +1229,12 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 						AvertissementStockes[AvertissementStockes[c.authId].unknownPlayerId[Number(a.text) - 1]].avertissements += 1
 						if(AvertissementStockes[AvertissementStockes[c.authId].unknownPlayerId[Number(a.text) - 1]].avertissements === 3 && AvertissementStockes[AvertissementStockes[c.authId].unknownPlayerId[Number(a.text) - 1]].role === "host") {
 							if(app.user.authId === AvertissementStockes[c.authId].unknownPlayerId[Number(a.text) - 1]) {
-								talk("Êtes-vous sûre de vouloir bannir l'hôte de la partie ? (O)")
-								end = 1
+								if(AvertissementStockes[AvertissementStockes[c.authId].unknownPlayerId].role != "Administrator") {
+									talk("Êtes-vous sûre de vouloir bannir l'hôte de la partie ? (O)")
+									end = 1
+								} else {
+									talk("Vous ne pouvez pas bannir un autre Administrateur.")
+								}
 							} else {
 								talk("Je n'ai pas pu bannir ce joueur.")
 							}
@@ -1984,7 +2002,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 	})
 	channel.socket.on("addUser", a => {
 		let b = channel.data.usersByAuthId[a.authId]
-		if(AvertissementStockes[a.authId].role === "Administrator") {
+		if(AvertissementStockes[b.authId].role === "Administrator") {
 			channel.socket.emit("modUser", {displayName: b.displayName, authId: b.authId})
 		} else if(AvertissementStockes[a.authId] != undefined) {
 			if (AvertissementStockes[a.authId].automod === 1) {
@@ -2001,16 +2019,16 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 		} else {
 			talk("Le joueur " + AvertissementStockes[b.authId].nom + " est arrivé. Il avait " + AvertissementStockes[b.authId].avertissements + " avertissements stockés.")
 		}
-		if(channel.data.users[i].authId.includes("facebook:") === true) {
-			AvertissementStockes[channel.data.users[i].authId].connexion = "Facebook"
-		} else if (channel.data.users[i].authId.includes("twitter:") === true) {
-			AvertissementStockes[channel.data.users[i].authId].connexion = "Twitter"
-		} else if (channel.data.users[i].authId.includes("google:") === true) {
-			AvertissementStockes[channel.data.users[i].authId].connexion = "Google"
-		} else if (channel.data.users[i].authId.includes("steam:") === true) {
-			AvertissementStockes[channel.data.users[i].authId].connexion = "Steam"
-		} else if (channel.data.users[i].authId.includes("twitch:") === true) {
-			AvertissementStockes[channel.data.users[i].authId].connexion = "Twitch"
+		if(b.authId.includes("facebook:") === true) {
+			AvertissementStockes[b.authId].connexion = "Facebook"
+		} else if (b.authId.includes("twitter:") === true) {
+			AvertissementStockes[b.authId].connexion = "Twitter"
+		} else if (b.authId.includes("google:") === true) {
+			AvertissementStockes[b.authId].connexion = "Google"
+		} else if (b.authId.includes("steam:") === true) {
+			AvertissementStockes[b.authId].connexion = "Steam"
+		} else if (b.authId.includes("twitch:") === true) {
+			AvertissementStockes[b.authId].connexion = "Twitch"
 		}
 	})
 	channel.socket.on("failWord", a => {
@@ -2054,27 +2072,29 @@ if(app.user.role === "host") {
 	talk("Vous n'avez pas les permissions requise pour activer Chat Bot. Demandez à l'hôte s'il peut vous mettre modérateur !")
 }
 var i = 0
-var j = 0
-if (j === 0) {
-	for(i = 0; i < channel.data.users.length; i++) {
-		if(channel.data.users[i].authId != "google:102026776801715750701" || channel.data.users[i].authId != "steam:76561198310476181") {
-			AvertissementStockes[channel.data.users[i].authId] = {avertissements: 0, nom: channel.data.users[i].displayName, role: channel.data.users[i].role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
-			if(channel.data.users[i].role === "host" || channel.data.users[i] === "moderator") {
-				Moderation[channel.data.users[i].authId] = {avertissement: 0, nom: channel.data.users[i].displayName, authId: channel.data.users[i].authId, mod: 0, joueur: "", joueurId: "", tentative: 0, role: channel.data.users[i].role, unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0, tricheur: 0}
-			}
-			j = 1
+for(i = 0; i < channel.data.users.length; i++) {
+	if(channel.data.users[i].authId === "google:102026776801715750701") {
+		AvertissementStockes["google:102026776801715750701"] = {avertissements: 0, nom: "Erina Nakiri", role: "Administrator", unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+		Moderation["google:102026776801715750701"] = {avertissement: 0, nom: "Erina Nakiri", authId: "google:102026776801715750701", mod: 0, joueur: "", joueurId: "", tentative: 0, role: "Administrator", unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0}
+	} else if(channel.data.users[i].authId === "steam:76561198310476181") {
+		AvertissementStockes["steam:76561198310476181"] = {avertissements: 0, nom: "fruhlingsanfang", role: "Administrator", unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+		Moderation["steam:76561198310476181"] = {avertissement: 0, nom: "fruhlingsanfang", authId: "steam:76561198310476181", mod: 0, joueur: "", joueurId: "", tentative: 0, role: "Administrator", unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0}	
+	} else {
+		AvertissementStockes[channel.data.users[i].authId] = {avertissements: 0, nom: channel.data.users[i].displayName, role: channel.data.users[i].role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
+		if(channel.data.users[i].role === "host" || channel.data.users[i] === "moderator") {
+			Moderation[channel.data.users[i].authId] = {avertissement: 0, nom: channel.data.users[i].displayName, authId: channel.data.users[i].authId, mod: 0, joueur: "", joueurId: "", tentative: 0, role: channel.data.users[i].role, unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0, tricheur: 0}
 		}
-		if(channel.data.users[i].authId.includes("facebook:") === true) {
-			AvertissementStockes[channel.data.users[i].authId].connexion = "Facebook"
-		} else if (channel.data.users[i].authId.includes("twitter:") === true) {
-			AvertissementStockes[channel.data.users[i].authId].connexion = "Twitter"
-		} else if (channel.data.users[i].authId.includes("google:") === true) {
-			AvertissementStockes[channel.data.users[i].authId].connexion = "Google"
-		} else if (channel.data.users[i].authId.includes("steam:") === true) {
-			AvertissementStockes[channel.data.users[i].authId].connexion = "Steam"
-		} else if (channel.data.users[i].authId.includes("twitch:") === true) {
-			AvertissementStockes[channel.data.users[i].authId].connexion = "Twitch"
-		}
+	}
+	if(channel.data.users[i].authId.includes("facebook:") === true) {
+		AvertissementStockes[channel.data.users[i].authId].connexion = "Facebook"
+	} else if (channel.data.users[i].authId.includes("twitter:") === true) {
+		AvertissementStockes[channel.data.users[i].authId].connexion = "Twitter"
+	} else if (channel.data.users[i].authId.includes("google:") === true) {
+		AvertissementStockes[channel.data.users[i].authId].connexion = "Google"
+	} else if (channel.data.users[i].authId.includes("steam:") === true) {
+		AvertissementStockes[channel.data.users[i].authId].connexion = "Steam"
+	} else if (channel.data.users[i].authId.includes("twitch:") === true) {
+		AvertissementStockes[channel.data.users[i].authId].connexion = "Twitch"
 	}
 }
 	
