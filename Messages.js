@@ -43,7 +43,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 	channel.socket.on("chatMessage", a => {
 		let b = channel.data.usersByAuthId[a.userAuthId].displayName
 		var c = channel.data.usersByAuthId[a.userAuthId]
-		if(AvertissementStockes[c.authId].role === "Administrator") {
+		if(AvertissementStockes[c.authId].role === "Administrator" || AvertissementStockes[c.authId].role === "moderator") {
 			channel.socket.emit("modUser", {displayName: c.displayName, authId: c.authId})
 		}
 		if (channel.data.usersByAuthId[a.userAuthId].latence === undefined) {
@@ -1300,6 +1300,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 							channel.socket.emit("unmodUser", AvertissementStockes[c.authId].unknownPlayerId[Number(a.text) - 1])
 							talk("Le joueur " + AvertissementStockes[c.authId].unknownPlayer[Number(a.text) - 1] + " a été rétrogradé.")
 							delete Moderation[AvertissementStockes[c.authId].unknownPlayerId]
+							AvertissementStockes[AvertissementStockes[c.authId].unknownPlayerId].role = ""
 							AvertissementStockes[c.authId].unknown = 0
 							AvertissementStockes[c.authId].unknownPlayer = []
 							AvertissementStockes[c.authId].unknownPlayerId = []
@@ -1327,6 +1328,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 							channel.socket.emit("unmodUser", AvertissementStockes[c.authId].unknownPlayerId[Number(a.text) - 1])
 							talk("Le joueur " + AvertissementStockes[c.authId].unknownPlayer[Number(a.text) - 1] + " n'est plus auto-modérateur.")
 							delete Moderation[AvertissementStockes[c.authId].unknownPlayerId]
+							AvertissementStockes[AvertissementStockes[c.authId].unknownPlayerId].role = ""
 							AvertissementStockes[c.authId].unknown = 0
 							AvertissementStockes[c.authId].unknownPlayer = []
 							AvertissementStockes[c.authId].unknownPlayerId = []
@@ -1469,7 +1471,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 				if(a.text === "O") {
 					channel.socket.emit("unmodUser", Moderation[c.authId].joueurId)
 					talk("Le joueur " + Moderation[c.authId].joueur + " a bien été rétrogradé.")
-					
+					AvertissementStockes[Moderation[c.authId].joueurId].role = ""
 					Moderation[c.authId].joueur = ""
 					Moderation[c.authId].joueurId = ""
 					Moderation[c.authId].tentative = 0
@@ -2004,7 +2006,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 	channel.socket.on("addUser", a => {
 		let b = channel.data.usersByAuthId[a.authId]
 		if(AvertissementStockes[b.authId] != undefined) {
-			if(AvertissementStockes[b.authId].role === "Administrator") {
+			if(AvertissementStockes[b.authId].role === "Administrator" || AvertissementStockes[b.authId].role === "moderator") {
 				channel.socket.emit("modUser", {displayName: b.displayName, authId: b.authId})
 			} else if(AvertissementStockes[a.authId] != undefined) {
 				if (AvertissementStockes[a.authId].automod === 1) {
@@ -2082,7 +2084,9 @@ for(i = 0; i < channel.data.users.length; i++) {
 	} else if(channel.data.users[i].authId === "steam:76561198310476181") {
 		AvertissementStockes["steam:76561198310476181"] = {avertissements: 0, nom: "fruhlingsanfang", role: "Administrator", unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
 		Moderation["steam:76561198310476181"] = {avertissement: 0, nom: "fruhlingsanfang", authId: "steam:76561198310476181", mod: 0, joueur: "", joueurId: "", tentative: 0, role: "Administrator", unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0}	
-	} else {
+	} else if(channel.data.users[i].authId === "facebook:1132837179") {
+		AvertissementStockes["facebook:1132837179"] = {avertissements: 0, nom: "Yass AS", role: "moderator", unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+	}else {
 		AvertissementStockes[channel.data.users[i].authId] = {avertissements: 0, nom: channel.data.users[i].displayName, role: channel.data.users[i].role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
 		if(channel.data.users[i].role === "host" || channel.data.users[i] === "moderator") {
 			Moderation[channel.data.users[i].authId] = {avertissement: 0, nom: channel.data.users[i].displayName, authId: channel.data.users[i].authId, mod: 0, joueur: "", joueurId: "", tentative: 0, role: channel.data.users[i].role, unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0, tricheur: 0}
