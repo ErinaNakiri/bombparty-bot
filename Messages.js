@@ -2003,7 +2003,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 	})
 	channel.socket.on("addUser", a => {
 		let b = channel.data.usersByAuthId[a.authId]
-		if((AvertissementStockes[b.authId] != undefined) {
+		if(AvertissementStockes[b.authId] != undefined) {
 			if(AvertissementStockes[b.authId].role === "Administrator") {
 				channel.socket.emit("modUser", {displayName: b.displayName, authId: b.authId})
 			} else if(AvertissementStockes[a.authId] != undefined) {
