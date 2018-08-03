@@ -29,6 +29,7 @@ var syllabeNiquée = -2
 var pendu = 0
 var jeuId = ""
 var motPendu = ""
+var motCaché = "RIM"
 var lettreTrouvées = ""
 function talk(msg){
 	if (app.user.role === "host") {
