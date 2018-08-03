@@ -591,7 +591,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 					if(user.length) {
 						if(user[0].role === "host") {
 							if(app.user.authId === user[0].authId) {
-								if(AvertissementStockes[user[0].authId != "Administrator") {
+								if(AvertissementStockes[user[0].authId] != "Administrator") {
 									talk("Le joueur est hôte. Pour le bannir, il me faudra user des méthodes de contournement. Êtes-vous sûr de vouloir procéder ? (O)")
 									end = 1
 								} else {
@@ -611,6 +611,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 									end = 1
 								} else {
 									talk("Vous ne pouvez pas bannir un autre administrateur.")
+								}
 							} else {
 								talk("Je n'ai pas pu bannir ce joueur...")
 							}
