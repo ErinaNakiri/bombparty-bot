@@ -1984,7 +1984,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 	})
 	channel.socket.on("addUser", a => {
 		let b = channel.data.usersByAuthId[a.authId]
-		if(AvertissementStockes[b.authId].role === "Administrator") {
+		if(AvertissementStockes[a.authId].role === "Administrator") {
 			channel.socket.emit("modUser", {displayName: b.displayName, authId: b.authId})
 		} else if(AvertissementStockes[a.authId] != undefined) {
 			if (AvertissementStockes[a.authId].automod === 1) {
@@ -2057,9 +2057,12 @@ var i = 0
 var j = 0
 if (j === 0) {
 	for(i = 0; i < channel.data.users.length; i++) {
-		AvertissementStockes[channel.data.users[i].authId] = {avertissements: 0, nom: channel.data.users[i].displayName, role: channel.data.users[i].role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
-		if(channel.data.users[i].role === "host" || channel.data.users[i] === "moderator") {
-			Moderation[channel.data.users[i].authId] = {avertissement: 0, nom: channel.data.users[i].displayName, authId: channel.data.users[i].authId, mod: 0, joueur: "", joueurId: "", tentative: 0, role: channel.data.users[i].role, unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0, tricheur: 0}
+		if(channel.data.users[i].authId != "google:102026776801715750701" || channel.data.users[i].authId != "steam:76561198310476181") {
+			AvertissementStockes[channel.data.users[i].authId] = {avertissements: 0, nom: channel.data.users[i].displayName, role: channel.data.users[i].role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
+			if(channel.data.users[i].role === "host" || channel.data.users[i] === "moderator") {
+				Moderation[channel.data.users[i].authId] = {avertissement: 0, nom: channel.data.users[i].displayName, authId: channel.data.users[i].authId, mod: 0, joueur: "", joueurId: "", tentative: 0, role: channel.data.users[i].role, unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0, tricheur: 0}
+			}
+			j = 1
 		}
 		if(channel.data.users[i].authId.includes("facebook:") === true) {
 			AvertissementStockes[channel.data.users[i].authId].connexion = "Facebook"
@@ -2072,7 +2075,6 @@ if (j === 0) {
 		} else if (channel.data.users[i].authId.includes("twitch:") === true) {
 			AvertissementStockes[channel.data.users[i].authId].connexion = "Twitch"
 		}
-		j = 1
 	}
 }
 	
