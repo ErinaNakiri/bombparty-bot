@@ -1974,7 +1974,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 				talk("Le joueur " + AvertissementStockes[a].nom + " est parti. Il était hôte.")
 				delete Moderation[a]
 			} else {
-				talk("Le joueur " + AvertissementStockes[a].nom] + " est parti. Il était administrateur.")
+				talk("Le joueur " + AvertissementStockes[a].nom + " est parti. Il était administrateur.")
 			}
 		} else if (a.includes("guest:") == false) {
 			if (AvertissementStockes[a].avertissements < 3) {
