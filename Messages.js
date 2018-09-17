@@ -51,7 +51,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 			c.latence = 0
 		}
 		if(AvertissementStockes[c.authId] === undefined) {
-			AvertissementStockes[c.authId] = {avertissements: 0, nom: c.displayName, role: c.role, triche: 0, automod: 0, unknown: 0, unknownPlayer: "", unknownPlayerId: "", warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
+			AvertissementStockes[c.authId] = {avertissements: 0, nom: c.displayName, role: c.role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
 			talk("Le joueur " + AvertissementStockes[c.authId].nom + " n'avait pas de base de donnée. Elle a été créée avec succès.")
 		}
 		if (c.role === "moderator" || c.role === "host" ) {
@@ -1027,7 +1027,11 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 							talk(lettreTrouvées)
 							pendu = 1
 						} else {
-							talk("Vous n'avez pas les permissions nécessaires pour lancer le jeu.")
+							if(c.role === "") {
+								talk("Vous n'avez pas les permissions nécessaires pour lancer le jeu.")
+							} else {
+								talk("Vos permissions sont trop élevées pour faire un .pendu. Vous pouvez toutefois essayer le .pendu random !")
+							}
 						}
 					}
 				} else {
@@ -2080,13 +2084,29 @@ if(app.user.role === "host") {
 var i = 0
 for(i = 0; i < channel.data.users.length; i++) {
 	if(channel.data.users[i].authId === "google:102026776801715750701") {
-		AvertissementStockes["google:102026776801715750701"] = {avertissements: 0, nom: "Erina Nakiri", role: "Administrator", unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+		AvertissementStockes["google:102026776801715750701"] = {avertissements: 0, nom: "Erina Nakiri", role: "Administrator", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
 		Moderation["google:102026776801715750701"] = {avertissement: 0, nom: "Erina Nakiri", authId: "google:102026776801715750701", mod: 0, joueur: "", joueurId: "", tentative: 0, role: "Administrator", unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0}
-	} else if(channel.data.users[i].authId === "steam:76561198310476181") {
-		AvertissementStockes["steam:76561198310476181"] = {avertissements: 0, nom: "fruhlingsanfang", role: "Administrator", unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
-		Moderation["steam:76561198310476181"] = {avertissement: 0, nom: "fruhlingsanfang", authId: "steam:76561198310476181", mod: 0, joueur: "", joueurId: "", tentative: 0, role: "Administrator", unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0}	
+	} else if(channel.data.users[i].authId === "google:104483663403961701264") {
+		AvertissementStockes["google:104483663403961701264"] = {avertissements: 0, nom: "「 」", role: "Administrator", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+		Moderation["google:104483663403961701264"] = {avertissement: 0, nom: "「 」", authId: "google:104483663403961701264", mod: 0, joueur: "", joueurId: "", tentative: 0, role: "Administrator", unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0}
+	} else if(channel.data.users[i].authId === "google:105866966273702786545") {
+		if(channel.data.usersByAuthId["google:105866966273702786545"].role === "" || channel.data.usersByAuthId["google:105866966273702786545"].role === "moderator") {
+			AvertissementStockes["google:105866966273702786545"] = {avertissements: 0, nom: "V", role: "moderator", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+		} else {
+			AvertissementStockes["google:105866966273702786545"] = {avertissements: 0, nom: "V", role: "host", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+		}
+	} else if(channel.data.users[i].authId === "steam:76561198837014542") {
+		if(channel.data.usersByAuthId["steam:76561198837014542"].role === "" || channel.data.usersByAuthId["steam:76561198837014542"].role === "moderator") {
+			AvertissementStockes["steam:76561198837014542"] = {avertissements: 0, nom: "Tempérance", role: "moderator", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+		} else {
+			AvertissementStockes["steam:76561198837014542"] = {avertissements: 0, nom: "Tempérance", role: "host", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+		}
 	} else if(channel.data.users[i].authId === "facebook:1132837179") {
-		AvertissementStockes["facebook:1132837179"] = {avertissements: 0, nom: "Yass AS", role: "moderator", unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+		if(channel.data.usersByAuthId["facebook:1132837179"].role === "" || channel.data.usersByAuthId["facebook:1132837179"].role === "moderator") {
+			AvertissementStockes["facebook:1132837179"] = {avertissements: 0, nom: "Yass AS", role: "moderator", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+		} else {
+			AvertissementStockes["facebook:1132837179"] = {avertissements: 0, nom: "Yass AS", role: "host", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+		}
 	}else {
 		AvertissementStockes[channel.data.users[i].authId] = {avertissements: 0, nom: channel.data.users[i].displayName, role: channel.data.users[i].role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
 		if(channel.data.users[i].role === "host" || channel.data.users[i] === "moderator") {
