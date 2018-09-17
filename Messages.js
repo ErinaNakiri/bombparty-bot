@@ -1987,76 +1987,76 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 					talk("La fonction restera activée.")
 					Moderation[c.authId].change = 0
 					Moderation[c.authId].tentative = 0
-				} else if(Moderation[c.authId].change === 9) {
-					if(a.text.toUpperCase() === "O") {
-						talk("La fonction a bien été désactivée.")
-						notif = 0
-						Moderation[c.authId].change = 0
-						Moderation[c.authId].tentative = 0
-					} else if(a.text.toUpperCase() === "N") {
-						talk("La fonction restera bien activée")
-						Moderation[c.authId].change = 0
-						Moderation[c.authId].tentative = 0
-					}
-				} else if(Moderation[c.authId].change === 10) {
-					if(a.text.toUpperCase() === "O") {
-						talk("La fonction a bien été réactivée")
-						notif = 1
-						Moderation[c.authId].change = 0
-						Moderation[c.authId].tentative = 0
-					} else if(a.text.toUpperCase() === "N") {
-						talk("La fonction restera bien désactivée.")
-						Moderation[c.authId].change = 0
-						Moderation[c.authId].tentative = 0
-					}
-				} else if(Moderation[c.authId].change === 11) {
-					if(a.text === "1") {
-						talk("Que souhaitez-vous que devienne la nouvelle limite de temps du guess? (secondes)")
-						Moderation[c.authId].change = 12
-						Moderation[c.authId].tentative = 0
-					} else if(a.text === "2") {
-						talk("Que souhaitez-vous que soit la nouvelle limite de temps du found? (secondes)")
-						Moderation[c.authId].change = 13
-						Moderation[c.authId].tentative = 0
-					} else if(a.text === "0") {
-						talk("L'action a été annulée")
-						Moderation[c.authId].change = 0
-						Moderation[c.authId].tentative = 0
-					}
-				} else if(Moderation[c.authId].change === 12) {
-					if(isNaN(a.text)) {
-						talk("Ce que vous avez écrit n'est pas un nombre !")
-					} else if(Number(a.text) < 0) {
-						talk("Vous ne pouvez pas inscrire un nombre négatif !")
-					} else {
-						talk("Le laps a été mis à " + a.text + " secondes.")
-						lapsguess = Number(a.text) * 1000
-						Moderation[c.authId].change = 0
-						Moderation[c.authId].tentative = 0
-					} 
-				}else if(Moderation[c.authId].change === 13) {
-					if(isNaN(a.text)) {
-						talk("Ce que vous avez écrit n'est pas un nombre !")
-					} else if(Number(a.text) < 0) {
-						talk("Vous ne pouvez pas inscrire un nombre négatif !")
-					} else {
-						talk("Le laps a été mis à " + a.text + " secondes.")
-						lapsfound = Number(a.text) * 1000
-						Moderation[c.authId].change = 0
-						Moderation[c.authId].tentative = 0
-					}
+				}
+			} else if(Moderation[c.authId].change === 9) {
+				if(a.text.toUpperCase() === "O") {
+					talk("La fonction a bien été désactivée.")
+					notif = 0
+					Moderation[c.authId].change = 0
+					Moderation[c.authId].tentative = 0
+				} else if(a.text.toUpperCase() === "N") {
+					talk("La fonction restera bien activée")
+					Moderation[c.authId].change = 0
+					Moderation[c.authId].tentative = 0
+				}
+			} else if(Moderation[c.authId].change === 10) {
+				if(a.text.toUpperCase() === "O") {
+					talk("La fonction a bien été réactivée")
+					notif = 1
+					Moderation[c.authId].change = 0
+					Moderation[c.authId].tentative = 0
+				} else if(a.text.toUpperCase() === "N") {
+					talk("La fonction restera bien désactivée.")
+					Moderation[c.authId].change = 0
+					Moderation[c.authId].tentative = 0
+				}
+			} else if(Moderation[c.authId].change === 11) {
+				if(a.text === "1") {
+					talk("Que souhaitez-vous que devienne la nouvelle limite de temps du guess? (secondes)")
+					Moderation[c.authId].change = 12
+					Moderation[c.authId].tentative = 0
+				} else if(a.text === "2") {
+					talk("Que souhaitez-vous que soit la nouvelle limite de temps du found? (secondes)")
+					Moderation[c.authId].change = 13
+					Moderation[c.authId].tentative = 0
+				} else if(a.text === "0") {
+					talk("L'action a été annulée")
+					Moderation[c.authId].change = 0
+					Moderation[c.authId].tentative = 0
+				}
+			} else if(Moderation[c.authId].change === 12) {
+				if(isNaN(a.text)) {
+					talk("Ce que vous avez écrit n'est pas un nombre !")
+				} else if(Number(a.text) < 0) {
+					talk("Vous ne pouvez pas inscrire un nombre négatif !")
 				} else {
-					if (Moderation[c.authId].tentative == 0) {
-						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres. (O/N)")
-						Moderation[c.authId].tentative = 1
-					} else if (Moderation[c.authId].tentative == 1) {
-						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres (O/N) Ceci est votre dernier avertissement.")
-						Moderation[c.authId].tentative = 2
-					} else {
-						talk("L'action a été annulée.")
-						Moderation[c.authId].tentative = 0
-						Moderation[c.authId].change = 0
-					}
+					talk("Le laps a été mis à " + a.text + " secondes.")
+					lapsguess = Number(a.text) * 1000
+					Moderation[c.authId].change = 0
+					Moderation[c.authId].tentative = 0
+				} 
+			}else if(Moderation[c.authId].change === 13) {
+				if(isNaN(a.text)) {
+					talk("Ce que vous avez écrit n'est pas un nombre !")
+				} else if(Number(a.text) < 0) {
+					talk("Vous ne pouvez pas inscrire un nombre négatif !")
+				} else {
+					talk("Le laps a été mis à " + a.text + " secondes.")
+					lapsfound = Number(a.text) * 1000
+					Moderation[c.authId].change = 0
+					Moderation[c.authId].tentative = 0
+				}
+			} else {
+				if (Moderation[c.authId].tentative == 0) {
+					talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres. (O/N)")
+					Moderation[c.authId].tentative = 1
+				} else if (Moderation[c.authId].tentative == 1) {
+					talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres (O/N) Ceci est votre dernier avertissement.")
+					Moderation[c.authId].tentative = 2
+				} else {
+					talk("L'action a été annulée.")
+					Moderation[c.authId].tentative = 0
+					Moderation[c.authId].change = 0
 				}
 			} if (end === 1) {
 				if(AvertissementStockes[c.authId].role === "Administrator") {
