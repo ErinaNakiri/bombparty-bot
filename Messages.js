@@ -27,6 +27,7 @@ var parle = -1
 var aide = -2
 var syllabeNiquée = -2
 var pendu = 0
+var notif = 1
 var jeuId = ""
 var motPendu = ""
 var motCaché = "RIM"
@@ -509,7 +510,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 						if(Moderation[c.authId].joueurId === "") {
 							Moderation[c.authId].change = 1
 							talk("Quel paramètre souhaitez-vous modifier ?")
-							talk("1. Limite de caractères. 2. Détection automatique de bot. 3. Activer ou désactiver le .c 4. Activer ou désactiver les syllabes niquées 0. Annuler")
+							talk("1. Limite de caractères. | 2. Détection automatique de bot. | 3. Activer ou désactiver le .c | 4. Activer ou désactiver les syllabes niquées | 5. Activer ou désactiver les notifs d'entrée/sortie | 0. Annuler")
 						} else {
 							talk("Vous êtes déjà en train de modérer un joueur !")
 						}
@@ -521,7 +522,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 				}
 			} else if(~["patch"].indexOf(cmd[0])) {
 				if(cmd.length === 1) {
-					talk("Quel patch ? (1.0, 1.1, 1.2)")
+					talk("Quel patch ? (1.0, 1.1, 1.2, 1.3, 1.3.1, 1.4)")
 				} else if(cmd[1] === "1.0") {
 					talk("Voici les principales mises à jours de la version 1.0.")
 					talk("Ajout du système d'avertissements. Ajout du .warn, .addwarn, .help, .removewarn, .mod, .unmod, .automod, .ban. Ajout d'une limite de caractère. Ajout d'un détecteur de bot.")
@@ -534,6 +535,9 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 				} else if(cmd[1] === "1.3") {
 					talk("Voici les principales mises à jours de la version 1.3")
 					talk("Ajout du premier jeu, .pendu, qui vient avec .guess et .found. Amusez-vous !")
+				} else if(cmd[1] === "1.3.1") {
+					talk("Voici les principales mises à jours de la version 1.3.1")
+					talk("Ajout de l'option de retirer les notifs d'arrivée et de sortie.")
 				} else if(cmd[1] === "1.4") {
 					talk("Cette mise à jour n'a pas encore été appliquée, et est sujette à des changements sans préavis.")
 					talk("Ajout possible du .info, .t et rééquilibrage du spam.")
@@ -1816,6 +1820,16 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 						Moderation[c.authId].change = 8
 						Moderation[c.authId].tentative = 0
 					}
+				}else if(a.text === "5") {
+					if(notif === 1) {
+						talk("Souhaitez-vous désactiver les notifications d'entrée et de sortie ? (O/N)")
+						Moderation[c.authId].change = 9
+						Moderation[c.authId].tentative = 0
+					} else {
+						talk("Souhaitez-vous activer les notifications d'entrée et de sortie ? (O/N)")
+						Moderation[c.authId].change = 10
+						Moderation[c.authId].tentative = 0
+					}
 				}else if (a.text === 0) {
 					talk("L'action a bien été annulée.")
 					Moderation[c.authId].change = 0
@@ -1966,6 +1980,28 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 					talk("La fonction restera activée.")
 					Moderation[c.authId].change = 0
 					Moderation[c.authId].tentative = 0
+				} else if(Moderation[c.authId].change === 9) {
+					if(a.text.toUpperCase() === "O") {
+						talk("La fonction a bien été désactivée.")
+						notif = 0
+						Moderation[c.authId].change = 0
+						Moderation[c.authId].tentative = 0
+					} else if(a.text.toUpperCase() === "N") {
+						talk("La fonction restera bien activée")
+						Moderation[c.authId].change = 0
+						Moderation[c.authId].tentative = 0
+					}
+				} else if(Moderation[c.authId].change === 10) {
+					if(a.text.toUpperCase() === "O") {
+						talk("La fonction a bien été réactivée")
+						notif = 1
+						Moderation[c.authId].change = 0
+						Moderation[c.authId].tentative = 0
+					} else if(a.text.toUpperCase() === "N") {
+						talk("La fonction restera bien désactivée.")
+						Moderation[c.authId].change = 0
+						Moderation[c.authId].tentative = 0
+					}
 				} else {
 					if (Moderation[c.authId].tentative == 0) {
 						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres. (O/N)")
@@ -2025,7 +2061,9 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 			}
 		} else if (a.includes("guest:") == false) {
 			if (AvertissementStockes[a].avertissements < 3) {
-				talk("Le joueur " + AvertissementStockes[a].nom + " est parti. Il avait " + AvertissementStockes[a].avertissements + " avertissements.")
+				if(notif === 1) {
+					talk("Le joueur " + AvertissementStockes[a].nom + " est parti. Il avait " + AvertissementStockes[a].avertissements + " avertissements.")
+				}
 			}
 		}
 	})
@@ -2045,10 +2083,14 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 				AvertissementStockes[b.authId] = {avertissements: 2, nom: a.displayName, role: a.role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
 			} else {
 				AvertissementStockes[b.authId] = {avertissements: 0, nom: a.displayName, role: a.role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
-			talk("Le joueur " + AvertissementStockes[b.authId].nom + " est arrivé. C'est la première fois que l'on voit ce joueur.")
+				if(notif === 1) {
+					talk("Le joueur " + AvertissementStockes[b.authId].nom + " est arrivé. C'est la première fois que l'on voit ce joueur.")
+				}
 			}
 		} else {
-			talk("Le joueur " + AvertissementStockes[b.authId].nom + " est arrivé. Il avait " + AvertissementStockes[b.authId].avertissements + " avertissements stockés.")
+			if(notif === 1) {
+				talk("Le joueur " + AvertissementStockes[b.authId].nom + " est arrivé. Il avait " + AvertissementStockes[b.authId].avertissements + " avertissements stockés.")
+			}
 		}
 		if(b.authId.includes("facebook:") === true) {
 			AvertissementStockes[b.authId].connexion = "Facebook"
@@ -2094,10 +2136,10 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 	})
 }
 if(app.user.role === "host") {
-	talk("Le programme Chat Bot 1.3 par Erina a été activé avec succès !")
+	talk("Le programme Chat Bot 1.3.1 par Erina a été activé avec succès !")
 	talk("Veuillez choisir une limite de caractères par messages. Si vous n'en voulez pas, écrivez 'Aucune'.")
 } else if (app.user.role === "moderator") {
-	talk("Le programme Chat Bot 1.3 par Erina a été activé avec succès en mode modérateur !")
+	talk("Le programme Chat Bot 1.3.1 par Erina a été activé avec succès en mode modérateur !")
 	talk("Veuillez choisir une limite de caractères par messages. Si vous n'en voulez pas, écrivez 'Aucune'.")
 } else {
 	talk("Vous n'avez pas les permissions requise pour activer Chat Bot. Demandez à l'hôte s'il peut vous mettre modérateur !")
