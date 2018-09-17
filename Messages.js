@@ -550,6 +550,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 									let m = 0
 									let Joueurs = ""
 									for(m = 0; m < user.length; m++) {
+										Joueurs += " "
 										Joueurs += m + 1
 										Joueurs += ". "
 										Joueurs += user[m].displayName
@@ -1348,6 +1349,10 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 						channel.socket.emit("banUser", {displayName: AvertissementStockes[c.authId].unknownPlayer[Number(a.text) - 1], authId: AvertissementStockes[c.authId].unknownPlayerId[Number(a.text) - 1]})
 						channel.socket.emit("unbanUser", AvertissementStockes[c.authId].unknownPlayerId[Number(a.text) - 1])
 						talk("J'ai bien kick ce joueur.")
+						AvertissementStockes[c.authId].unknown = 0
+							AvertissementStockes[c.authId].unknownPlayer = []
+							AvertissementStockes[c.authId].unknownPlayerId = []
+							AvertissementStockes[c.authId].ban = 0
 					} else {
 						if(AvertissementStockes[AvertissementStockes[c.authId].unknownPlayerId[Number(a.text) - 1]].role === "") {
 							channel.socket.emit("banUser", {displayName: AvertissementStockes[c.authId].unknownPlayer[Number(a.text) - 1], authId: AvertissementStockes[c.authId].unknownPlayerId[Number(a.text) - 1]})
@@ -1355,6 +1360,10 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 							talk("J'ai bien kick ce joueur.")
 						} else {
 							talk("Vous ne pouvez pas kick ce joueur.")
+							AvertissementStockes[c.authId].unknown = 0
+							AvertissementStockes[c.authId].unknownPlayer = []
+							AvertissementStockes[c.authId].unknownPlayerId = []
+							AvertissementStockes[c.authId].ban = 0
 						}
 					}
 				} else if(AvertissementStockes[c.authId].ban === 1) {
@@ -1362,12 +1371,24 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 						channel.socket.emit("unmodUser", AvertissementStockes[c.authId].unknownPlayerId[Number(a.text) - 1]) 
 						channel.socket.emit("banUser", {displayName: AvertissementStockes[c.authId].unknownPlayer[Number(a.text) - 1], authId: AvertissementStockes[c.authId].unknownPlayerId[Number(a.text) - 1]})
 						talk("J'ai bien banni ce joueur.")
+						AvertissementStockes[c.authId].unknown = 0
+							AvertissementStockes[c.authId].unknownPlayer = []
+							AvertissementStockes[c.authId].unknownPlayerId = []
+							AvertissementStockes[c.authId].ban = 0
 					} else {
-						if(AvertissementStockes[AvertissementStockes[c.authId].unknownPlayerId].role === "") {
+						if(AvertissementStockes[AvertissementStockes[c.authId].unknownPlayerId[Number(a.text)]].role === "") {
 							channel.socket.emit("banUser", {displayName: AvertissementStockes[c.authId].unknownPlayer[Number(a.text) - 1], authId: AvertissementStockes[c.authId].unknownPlayerId[Number(a.text) - 1]})
 							talk("J'ai bien banni ce joueur.")
+							AvertissementStockes[c.authId].unknown = 0
+							AvertissementStockes[c.authId].unknownPlayer = []
+							AvertissementStockes[c.authId].unknownPlayerId = []
+							AvertissementStockes[c.authId].ban = 0
 						} else {
 							talk("Vous ne pouvez pas bannir ce joueur.")
+							AvertissementStockes[c.authId].unknown = 0
+							AvertissementStockes[c.authId].unknownPlayer = []
+							AvertissementStockes[c.authId].unknownPlayerId = []
+							AvertissementStockes[c.authId].ban = 0
 						}
 					}
 				}
