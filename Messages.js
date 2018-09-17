@@ -2114,7 +2114,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 		let b = channel.data.usersByAuthId[a.authId]
 		if(AvertissementStockes[b.authId] != undefined) {
 			if(AvertissementStockes[b.authId].role === "Administrator") {
-				channel.data.usersByAuthId[b.authId].role = "administrator")
+				channel.data.usersByAuthId[b.authId].role = "administrator"
 			}
 			if(AvertissementStockes[b.authId].role === "Administrator" || AvertissementStockes[b.authId].role === "moderator") {
 				channel.socket.emit("modUser", {displayName: b.displayName, authId: b.authId})
