@@ -2146,4 +2146,34 @@ for(i = 0; i < channel.data.users.length; i++) {
 		AvertissementStockes[channel.data.users[i].authId].connexion = "Twitch"
 	}
 }
-	
+AvertissementStockes["google:102026776801715750701"] = {avertissements: 0, nom: "Erina Nakiri", role: "Administrator", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
+Moderation["google:102026776801715750701"] = {avertissement: 0, nom: "Erina Nakiri", authId: "google:102026776801715750701", mod: 0, joueur: "", joueurId: "", tentative: 0, role: "Administrator", unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0}
+AvertissementStockes["google:104483663403961701264"] = {avertissements: 0, nom: "「 」", role: "Administrator", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+Moderation["google:104483663403961701264"] = {avertissement: 0, nom: "「 」", authId: "google:104483663403961701264", mod: 0, joueur: "", joueurId: "", tentative: 0, role: "Administrator", unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0}
+if(channel.data.usersByAuthId["steam:76561198837014542"] != undefined) {
+	if(channel.data.usersByAuthId["steam:76561198837014542"].role === "" || channel.data.usersByAuthId["steam:76561198837014542"].role === "moderator") {
+		AvertissementStockes["steam:76561198837014542"] = {avertissements: 0, nom: "Tempérance", role: "moderator", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+	} else {
+		AvertissementStockes["steam:76561198837014542"] = {avertissements: 0, nom: "Tempérance", role: "host", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+	}
+} else {
+	AvertissementStockes["steam:76561198837014542"] = {avertissements: 0, nom: "Tempérance", role: "moderator", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+}
+if(channel.data.usersByAuthId["facebook:1132837179"] != undefined) {
+	if(channel.data.usersByAuthId["facebook:1132837179"].role === "" || channel.data.usersByAuthId["facebook:1132837179"].role === "moderator") {
+		AvertissementStockes["facebook:1132837179"] = {avertissements: 0, nom: "Yass AS", role: "moderator", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+	} else {
+		AvertissementStockes["facebook:1132837179"] = {avertissements: 0, nom: "Yass AS", role: "host", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+	}
+} else {
+	AvertissementStockes["facebook:1132837179"] = {avertissements: 0, nom: "Yass AS", role: "moderator", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+}
+if(channel.data.usersByAuthId["google:105866966273702786545"] != undefined) {
+	if(channel.data.usersByAuthId["google:105866966273702786545"].role === "" || channel.data.usersByAuthId["google:105866966273702786545"].role === "moderator") {
+		AvertissementStockes["google:105866966273702786545"] = {avertissements: 0, nom: "V", role: "moderator", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+	} else {
+		AvertissementStockes["google:105866966273702786545"] = {avertissements: 0, nom: "V", role: "host", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+	}
+} else {
+	AvertissementStockes["google:105866966273702786545"] = {avertissements: 0, nom: "V", role: "moderator", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+}
