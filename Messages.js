@@ -32,6 +32,8 @@ var jeuId = ""
 var motPendu = ""
 var motCaché = "RIM"
 var lettreTrouvées = ""
+var lapsguess = 60000
+var lapsfound = 300000
 function talk(msg){
 	if (app.user.role === "host") {
 		channel.socket.emit("settings:room.welcomeMessage", msg)
@@ -510,7 +512,8 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 						if(Moderation[c.authId].joueurId === "") {
 							Moderation[c.authId].change = 1
 							talk("Quel paramètre souhaitez-vous modifier ?")
-							talk("1. Limite de caractères. | 2. Détection automatique de bot. | 3. Activer ou désactiver le .c | 4. Activer ou désactiver les syllabes niquées | 5. Activer ou désactiver les notifs d'entrée/sortie | 0. Annuler")
+							talk("1. Limite de caractères. | 2. Détection automatique de bot. | 3. Activer ou désactiver le .c | 4. Activer ou désactiver les syllabes niquées")
+							talk("5. Activer ou désactiver les notifs d'entrée/sortie | 6. Changer le laps du pendu | 0. Annuler")
 						} else {
 							talk("Vous êtes déjà en train de modérer un joueur !")
 						}
@@ -537,7 +540,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 					talk("Ajout du premier jeu, .pendu, qui vient avec .guess et .found. Amusez-vous !")
 				} else if(cmd[1] === "1.3.1") {
 					talk("Voici les principales mises à jours de la version 1.3.1")
-					talk("Ajout de l'option de retirer les notifs d'arrivée et de sortie.")
+					talk("Ajout de l'option de retirer les notifs d'arrivée et de sortie. Ajout du choix du laps du pendu.")
 				} else if(cmd[1] === "1.4") {
 					talk("Cette mise à jour n'a pas encore été appliquée, et est sujette à des changements sans préavis.")
 					talk("Ajout possible du .info, .t et rééquilibrage du spam.")
@@ -1048,7 +1051,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 						talk("Le jeu ne peut pas être avancé par le créateur de celui-ci.")
 					} else {
 						let lapsend = Date.now()
-						if(AvertissementStockes[c.authId].lapsguess === 0 || (lapsend - AvertissementStockes[c.authId].lapsguess) > 60000) {
+						if(AvertissementStockes[c.authId].lapsguess === 0 || (lapsend - AvertissementStockes[c.authId].lapsguess) > lapsguess) {
 							if(cmd.length === 2) {
 								if(cmd[1].length === 1) {
 									AvertissementStockes[c.authId].lapsguess = Date.now()
@@ -1091,8 +1094,8 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 								talk("Vous n'avez pas entré votre guess correctement !")
 							}
 						} else {
-							let tpsrestant = Math.round(((lapsend - AvertissementStockes[c.authId].lapsguess)/1000) % 60)
-							talk("Vous allez trop vite ! " + (60 - tpsrestant) + "s restantes !")
+							let tpsrestant = Math.round(((lapsend - AvertissementStockes[c.authId].lapsguess)/1000))
+							talk("Vous allez trop vite ! " + (lapsguess/1000 - tpsrestant) + "s restantes !")
 						} 
 					}
 				} else {
@@ -1104,7 +1107,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 						talk("Le jeu ne peut pas être avancé par le créateur de celui-ci.")
 					} else {
 						let lapsend = Date.now()
-						if(AvertissementStockes[c.authId].lapsguess === 0 || (lapsend - AvertissementStockes[c.authId].lapsfound) > 300000) {
+						if(AvertissementStockes[c.authId].lapsfound === 0 || (lapsend - AvertissementStockes[c.authId].lapsfound) > lapsfound) {
 							if(cmd.length === 1 || cmd.length > 2) {
 								talk("Vous n'avez pas entré votre commande correctement.")
 							} else {
@@ -1122,8 +1125,8 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 								}
 							}
 						} else {
-							let tpsrestant = Math.round(((lapsend - AvertissementStockes[c.authId].lapsguess)/1000) % 300)
-							talk("Vous allez trop vite ! " + (300 - tpsrestant) + "s restantes !")
+							let tpsrestant = Math.round(((lapsend - AvertissementStockes[c.authId].lapsfound)/1000))
+							talk("Vous allez trop vite ! " + (lapsfound/1000 - tpsrestant) + "s restantes !")
 						}
 					}
 				} else {
@@ -1830,6 +1833,10 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 						Moderation[c.authId].change = 10
 						Moderation[c.authId].tentative = 0
 					}
+				} else if(a.text === "6") {
+					talk("Souhaitez-vous changer le laps du .guess (" + lapsguess/1000 + "s), le laps du .found (" + lapsfound/1000 + "s) ou annuler ? (1, 2, 0)")
+					Moderation[c.authId].change = 11
+					Moderation[c.authId].tentative = 0
 				}else if (a.text === 0) {
 					talk("L'action a bien été annulée.")
 					Moderation[c.authId].change = 0
@@ -1999,6 +2006,42 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 						Moderation[c.authId].tentative = 0
 					} else if(a.text.toUpperCase() === "N") {
 						talk("La fonction restera bien désactivée.")
+						Moderation[c.authId].change = 0
+						Moderation[c.authId].tentative = 0
+					}
+				} else if(Moderation[c.authId].change === 11) {
+					if(a.text === "1") {
+						talk("Que souhaitez-vous que devienne la nouvelle limite de temps du guess? (secondes)")
+						Moderation[c.authId].change = 12
+						Moderation[c.authId].tentative = 0
+					} else if(a.text === "2") {
+						talk("Que souhaitez-vous que soit la nouvelle limite de temps du found? (secondes)")
+						Moderation[c.authId].change = 13
+						Moderation[c.authId].tentative = 0
+					} else if(a.text === "0") {
+						talk("L'action a été annulée")
+						Moderation[c.authId].change = 0
+						Moderation[c.authId].tentative = 0
+					}
+				} else if(Moderation[c.authId].change === 12) {
+					if(isNaN(a.text)) {
+						talk("Ce que vous avez écrit n'est pas un nombre !")
+					} else if(Number(a.text) < 0) {
+						talk("Vous ne pouvez pas inscrire un nombre négatif !")
+					} else {
+						talk("Le laps a été mis à " + a.text + " secondes.")
+						lapsguess = Number(a.text) * 1000
+						Moderation[c.authId].change = 0
+						Moderation[c.authId].tentative = 0
+					} 
+				}else if(Moderation[c.authId].change === 13) {
+					if(isNaN(a.text)) {
+						talk("Ce que vous avez écrit n'est pas un nombre !")
+					} else if(Number(a.text) < 0) {
+						talk("Vous ne pouvez pas inscrire un nombre négatif !")
+					} else {
+						talk("Le laps a été mis à " + a.text + " secondes.")
+						lapsfound = Number(a.text) * 1000
 						Moderation[c.authId].change = 0
 						Moderation[c.authId].tentative = 0
 					}
