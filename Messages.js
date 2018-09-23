@@ -35,13 +35,8 @@ var lettreTrouvées = ""
 var lapsguess = 60000
 var lapsfound = 300000
 function talk(msg){
-	if (app.user.role === "host") {
-		channel.socket.emit("settings:room.welcomeMessage", msg)
-		parle = 0
-	} else {
-		channel.socket.emit("chatMessage", msg)
-		parle = 1
-	}
+	channel.socket.emit(app.user.role == "host" ? "settings:room.welcomeMessage" : "chatMessage", msg)
+	parle = app.user.role == "host" ? 0 : 1
 }
 if (app.user.role === "host" || app.user.role === "moderator") {
 	channel.socket.on("chatMessage", a => {
@@ -85,7 +80,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 					autoban = -1
 				}
 			} 
-		} else if(autoban === -1) {
+		} else if(!~autoban) {
 			if(app.user.authId === c.authId || AvertissementStockes[c.authId].role === "Administrator") {
 				if(a.text === "O") {
 					talk("La fonction a bien été activée !")
@@ -167,7 +162,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 		}
 		let cmd = a.text.substr(1).split(" ")
 		let isCmd = ~["/", "."].indexOf(a.text[0])
-		if(isCmd){
+		if(isCmd && a.text.trim().length > 1){
 			if(~["warn"].indexOf(cmd[0])) {
 				if(cmd.length === 1){
 					talk("Quel joueur ?")
@@ -553,38 +548,13 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 					if(c.role === "moderator" || c.role === "host") {
 						if(AvertissementStockes[c.authId].unknown === 0) {
 							if(Moderation[c.authId].joueurId === "") {
-								let inconnu = function() {
-									let m = 0
-									let Joueurs = ""
-									for(m = 0; m < user.length; m++) {
-										Joueurs += " "
-										Joueurs += m + 1
-										Joueurs += ". "
-										Joueurs += user[m].displayName
-										if(AvertissementStockes[user[m].authId].connexion != undefined) {
-											Joueurs += " (Connecté sur: "
-											Joueurs += AvertissementStockes[user[m].authId].connexion
-											Joueurs += ") "
-										}
-										if(AvertissementStockes[user[m].authId].role === "Administrator") {
-											Joueurs += "(Admin) "
-										} else if (user[m].role === "moderator") {
-											Joueurs += "(Modo) "
-										} else if (user[m].role === "host") {
-											Joueurs += "(Hôte) "
-										}
-									}
-									talk(Joueurs)
-								}
-								let n = 0
 								talk("Il y a plus d'un joueur qui correspond à votre recherche. S'agit-il de l'un de ceux-ci ?")
 								AvertissementStockes[c.authId].unknown = 1
 								AvertissementStockes[c.authId].ban = 1
-								for(n = 0; n < user.length; n++) {
-									AvertissementStockes[c.authId].unknownPlayer.push(user[n].displayName)
-									AvertissementStockes[c.authId].unknownPlayerId.push(user[n].authId)
-								}
-								inconnu()
+								AvertissementStockes[c.authId].unknownPlayer =  user.map(x=>x.displayName)
+								AvertissementStockes[c.authId].unknownPlayerId = user.map(x=>x.authId)
+								let Joueurs = user.map((x,y)=> (y + 1) + ". " + (AvertissementStockes[x.authId].connexion ? "(Connecté sur: " + AvertissementStockes[x.authId].connexion + ") ": "") + x.displayName + " " + (AvertissementStockes[x.authId].role === "Administrator" ? "(Admin)" : ({moderator: "(Modo)", host: "(Hôte)", "":""}[x.role])) + "")
+								talk(Joueurs.join(" "))
 								talk("Indiquez le nombre correspondant au joueur que vous cherchez.")
 							} else {
 								talk("Vous êtes déjà en train de modérer un joueur.")
@@ -664,37 +634,13 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 					if(c.role === "moderator" || c.role === "host") {
 						if(AvertissementStockes[c.authId].unknown === 0) {
 							if(Moderation[c.authId].joueurId === "") {
-								let inconnu = function() {
-									let m = 0
-									let Joueurs = ""
-									for(m = 0; m < user.length; m++) {
-										Joueurs += m + 1
-										Joueurs += ". "
-										Joueurs += user[m].displayName
-										if(AvertissementStockes[user[m].authId].connexion != undefined) {
-											Joueurs += " (Connecté sur: "
-											Joueurs += AvertissementStockes[user[m].authId].connexion
-											Joueurs += ") "
-										}
-										if(AvertissementStockes[user[m].authId].role === "Administrator") {
-											Joueurs += "(Admin) "
-										} else if (user[m].role === "moderator") {
-											Joueurs += "(Modo) "
-										} else if (user[m].role === "host") {
-											Joueurs += "(Hôte) "
-										}
-									}
-									talk(Joueurs)
-								}
-								let n = 0
 								talk("Il y a plus d'un joueur qui correspond à votre recherche. S'agit-il de l'un de ceux-ci ?")
 								AvertissementStockes[c.authId].unknown = 1
 								AvertissementStockes[c.authId].removewarn = 1
-								for(n = 0; n < user.length; n++) {
-									AvertissementStockes[c.authId].unknownPlayer.push(user[n].displayName)
-									AvertissementStockes[c.authId].unknownPlayerId.push(user[n].authId)
-								}
-								inconnu()
+								AvertissementStockes[c.authId].unknownPlayer = user.map(x=>x.displayName)
+								AvertissementStockes[c.authId].unknownPlayerId = user.map(x=>x.authId)
+								let Joueurs = user.map((x,y)=> y + ". " + (AvertissementStockes[x.authId].connexion ? "(Connecté sur:" + AvertissementStockes[x.authId].connexion + ") ": "") + x.displayName + AvertissementStockes[x.authId].role === "Administrator" ? "(Admin)" : ({moderator: "(Modo)", host: "(Hôte)"}[x.role] || "") + "")
+								talk(Joueurs.join(" "))
 								talk("Indiquez le nombre correspondant au joueur que vous cherchez.")
 							} else {
 								talk("Vous êtes déjà en train de modérer un joueur.")
@@ -736,28 +682,23 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 				}
 			} else if (~["help"].indexOf(cmd[0])) {
 				if (cmd.length === 1) {
+					talk("Voici la liste des commandes. Pour avoir plus d'information sur une commande, faites .help [la commande].")
 					if (c.role === "") {
 						if(app.user.role === "host") {
-							talk("Voici la liste des commandes. Pour avoir plus d'information sur une commande, faites .help [la commande].")
 							talk("warn | help | c | guess | found")
 						} else {
-							talk("Voici la liste des commandes. Pour avoir plus d'information sur une commande, faites .help [la commande].")
 							talk("warn | help")
 						}
 					} else if (c.role === "moderator") {
 						if (app.user.authId === a.authId) {
-							talk("Voici la liste des commandes. Pour avoir plus d'information sur une commande, faites .help [la commande].")
 							talk("warn | addwarn | ban | removewarn | help | change | guess | found")
 						} else {
-							talk("Voici la liste des commandes. Pour avoir plus d'information sur une commande, faites .help [la commande].")
 							talk("warn | addwarn | ban | removewarn | help | guess | found | pendu")
 						}
 					} else {
 						if(app.user.role === "host") {
-							talk("Voici la liste des commandes. Pour avoir plus d'information sur une commande, faites .help [la commande].")
 							talk("warn | help | addwarn | ban | removewarn | mod | unmod | change | kick | automod | c | guess | found | pendu")
 						} else {
-							talk("Voici la liste des commandes. Pour avoir plus d'information sur une commande, faites .help [la commande].")
 							talk("warn | addwarn | ban | removewarn | help | change | kick | c ")
 						}
 					}
@@ -927,53 +868,9 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 			} else if(~["c"].indexOf(cmd[0])) {
 				if(aide === 1) {
 					shuffle(monDico)
-					let aide1 = []
-					let syllabe = channel.data.wordRoot;
-					if(cmd.length > 1) {
-						var syllabeChoisie = cmd[1].toUpperCase()
-					}
-					if(cmd.length === 1) {
-						monDico.forEach(function(abcd) {
-							if (abcd.indexOf(syllabe)>-1) { 
-								aide1.push(abcd)
-							}
-						})
-						if(aide1.length >= 5) {
-							talk("Aide : (" + aide1.length +") " + aide1[0] + ", " + aide1[1] + ",  " + aide1[2] + ", " + aide1[3] + ", " + aide1[4] + ".")
-						} else if(aide1.length === 4) {
-							talk("Aide : (" + aide1.length +") " + aide1[0] + ", " + aide1[1] + ",  " + aide1[2] + ", " + aide1[3] +".")
-						} else if(aide1.length === 3) {
-							talk("Aide : (" + aide1.length +") " + aide1[0] + ", " + aide1[1] + ",  " + aide1[2] + ".")
-						} else if(aide1.length === 2) {
-							talk("Aide : (" + aide1.length +") " + aide1[0] + ", " + aide1[1] + ".")
-						} else if(aide1.length === 1) {
-							talk("Aide : (" + aide1.length +") " + aide1[0] + ".")
-						} else {
-							talk("Je n'ai trouvé aucun mot avec la syllabe " + syllabe)
-						}
-						aide1 = []
-					} else {
-						aide1 = []
-						monDico.forEach(function(efgh) {
-							if (efgh.indexOf(syllabeChoisie) >-1) {
-								aide1.push(efgh)
-							}
-						})
-						if(aide1.length >= 5) {
-						talk("Aide : (" + aide1.length +") " + aide1[0] + ", " + aide1[1] + ",  " + aide1[2] + ", " + aide1[3] + ", " + aide1[4] + ".")
-						} else if(aide1.length === 4) {
-							talk("Aide : (" + aide1.length +") " + aide1[0] + ", " + aide1[1] + ",  " + aide1[2] + ", " + aide1[3] +".")
-						} else if(aide1.length === 3) {
-							talk("Aide : (" + aide1.length +") " + aide1[0] + ", " + aide1[1] + ",  " + aide1[2] + ".")
-						} else if(aide1.length === 2) {
-							talk("Aide : (" + aide1.length +") " + aide1[0] + ", " + aide1[1] + ".")
-						} else if(aide1.length === 1) {
-							talk("Aide : (" + aide1.length +") " + aide1[0] + ".")
-						} else {
-							talk("Je n'ai trouvé aucun mot avec la syllabe " + syllabeChoisie)
-						}
-						aide1 = []
-					}
+					syllabeChoisie = cmd.length > 1 ? cmd[1].toUpperCase() : channel.data.wordRoot
+					let aide1 = monDico.filter(x=>~x.indexOf(syllabeChoisie))
+					aide1.length >=  1  ? talk("Aide : (" + aide1.length + ") " + aide1.slice(0, aide1.length >= 5 ? 5 : aide1.length).join(", ")) : talk("Je n'ai trouvé aucun mot avec la syllabe " + syllabeChoisie)
 				} else {
 					talk("Cette fonction a été désactivée !")
 				}
@@ -1204,7 +1101,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 							talk("Je n'ai pas pu kick ce joueur...")
 						} else {
 							let e = user[0].authId
-							channel.socket.emit("banUser", {displayName: user[0].displayName, authId: user[0].authId})
+							channel.socket.emit("banUser", user)
 							channel.socket.emit("unbanUser", e)
 							talk("J'ai kick ce joueur pour vous.")
 						}
@@ -1383,20 +1280,12 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 							AvertissementStockes[c.authId].unknownPlayerId = []
 							AvertissementStockes[c.authId].ban = 0
 					} else {
-						if(AvertissementStockes[AvertissementStockes[c.authId].unknownPlayerId[Number(a.text)]].role === "") {
-							channel.socket.emit("banUser", {displayName: AvertissementStockes[c.authId].unknownPlayer[Number(a.text) - 1], authId: AvertissementStockes[c.authId].unknownPlayerId[Number(a.text) - 1]})
-							talk("J'ai bien banni ce joueur.")
-							AvertissementStockes[c.authId].unknown = 0
-							AvertissementStockes[c.authId].unknownPlayer = []
-							AvertissementStockes[c.authId].unknownPlayerId = []
+						channel.socket.emit("banUser", {displayName: AvertissementStockes[c.authId].unknownPlayer[Number(a.text) - 1], authId: AvertissementStockes[c.authId].unknownPlayerId[Number(a.text) - 1]})
+						AvertissementStockes[AvertissementStockes[c.authId].unknownPlayerId[Number(a.text)]].role === "" ? talk("J'ai bien banni ce joueur.") : talk("Vous ne pouvez pas bannir ce joueur.")
+						AvertissementStockes[c.authId].unknown = 0
+						AvertissementStockes[c.authId].unknownPlayer = []
+						AvertissementStockes[c.authId].unknownPlayerId = []
 							AvertissementStockes[c.authId].ban = 0
-						} else {
-							talk("Vous ne pouvez pas bannir ce joueur.")
-							AvertissementStockes[c.authId].unknown = 0
-							AvertissementStockes[c.authId].unknownPlayer = []
-							AvertissementStockes[c.authId].unknownPlayerId = []
-							AvertissementStockes[c.authId].ban = 0
-						}
 					}
 				}
 			}
@@ -1645,7 +1534,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 				}	
 			} else if (Moderation[c.authId].automod === 1) {
 				if(a.text === "O") {
-					talk("Le joueur " + Moderation[c.authId].joueur + " est désormais modérateur automatique.")
+					talk("Le joueur " + Moderation[c.authId].joueur + " est désormais mod automatiquement.")
 					AvertissementStockes[Moderation[c.authId].joueurId].automod = 1
 					channel.socket.emit("modUser", {displayName: Moderation[c.authId].joueur, authId: Moderation[c.authId].joueurId})
 					Moderation[c.authId].joueur = ""
@@ -1837,7 +1726,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 					talk("Souhaitez-vous changer le laps du .guess (" + lapsguess/1000 + "s), le laps du .found (" + lapsfound/1000 + "s) ou annuler ? (1, 2, 0)")
 					Moderation[c.authId].change = 11
 					Moderation[c.authId].tentative = 0
-				}else if (a.text === 0) {
+				}else if (a.text === "0") {
 					talk("L'action a bien été annulée.")
 					Moderation[c.authId].change = 0
 					Moderation[c.authId].tentative = 0
@@ -1858,8 +1747,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 				if(isNaN(Number(a.text))) {
 					talk("Je n'ai pas reconnu ce nombre.")
 				} else {
-					talk("Le limite a été mise à " + a.text + " caractères.")
-					max = Number(a.text)
+					talk("Le limite a été mise à " + (max = Number(a.text)) + " caractères.")
 					Moderation[c.authId].change = 0
 				}
 			} else if(Moderation[c.authId].change === 3) {
@@ -1872,9 +1760,10 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 					talk("La fonction n'a pas été activée.")
 					Moderation[c.authId].change = 0
 					Moderation[c.authId].tentative = 0
+					
 				} else {
 					if (Moderation[c.authId].tentative == 0) {
-						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres. (O/N)")
+						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres. (O/N) 1")
 						Moderation[c.authId].tentative = 1
 					} else if (Moderation[c.authId].tentative == 1) {
 						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres (O/N) Ceci est votre dernier avertissement.")
@@ -1897,7 +1786,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 					Moderation[c.authId].tentative = 0
 				} else {
 					if (Moderation[c.authId].tentative == 0) {
-						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres. (O/N)")
+						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres. (O/N) 2")
 						Moderation[c.authId].tentative = 1
 					} else if (Moderation[c.authId].tentative == 1) {
 						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres (O/N) Ceci est votre dernier avertissement.")
@@ -1920,7 +1809,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 					Moderation[c.authId].tentative = 0
 				} else {
 					if (Moderation[c.authId].tentative == 0) {
-						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres. (O/N)")
+						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres. (O/N) 3")
 						Moderation[c.authId].tentative = 1
 					} else if (Moderation[c.authId].tentative == 1) {
 						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres (O/N) Ceci est votre dernier avertissement.")
@@ -1943,7 +1832,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 					Moderation[c.authId].tentative = 0
 				} else {
 					if (Moderation[c.authId].tentative == 0) {
-						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres. (O/N)")
+						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres. (O/N) 4")
 						Moderation[c.authId].tentative = 1
 					} else if (Moderation[c.authId].tentative == 1) {
 						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres (O/N) Ceci est votre dernier avertissement.")
@@ -1966,7 +1855,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 					Moderation[c.authId].tentative = 0
 				} else {
 					if (Moderation[c.authId].tentative == 0) {
-						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres. (O/N)")
+						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres. (O/N) 5")
 						Moderation[c.authId].tentative = 1
 					} else if (Moderation[c.authId].tentative == 1) {
 						talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres (O/N) Ceci est votre dernier avertissement.")
@@ -1977,36 +1866,10 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 						Moderation[c.authId].change = 0
 					}
 				}
-			} else if(Moderation[c.authId].change === 8) {
-				if(a.text === "O") {
-					talk("La fonction a bien été désactivée.")
-					syllabeNiquée = 0
-					Moderation[c.authId].change = 0
-					Moderation[c.authId].tentative = 0
-				} else if(a.text === "N") {
-					talk("La fonction restera activée.")
-					Moderation[c.authId].change = 0
-					Moderation[c.authId].tentative = 0
-				}
-			} else if(Moderation[c.authId].change === 9) {
-				if(a.text.toUpperCase() === "O") {
-					talk("La fonction a bien été désactivée.")
-					notif = 0
-					Moderation[c.authId].change = 0
-					Moderation[c.authId].tentative = 0
-				} else if(a.text.toUpperCase() === "N") {
-					talk("La fonction restera bien activée")
-					Moderation[c.authId].change = 0
-					Moderation[c.authId].tentative = 0
-				}
-			} else if(Moderation[c.authId].change === 10) {
-				if(a.text.toUpperCase() === "O") {
-					talk("La fonction a bien été réactivée")
-					notif = 1
-					Moderation[c.authId].change = 0
-					Moderation[c.authId].tentative = 0
-				} else if(a.text.toUpperCase() === "N") {
-					talk("La fonction restera bien désactivée.")
+			} else if(~[8,9,10].indexOf(Moderation[c.authId].change )) {
+				if(a.text.toUpperCase() === "O" || a.text.toUpperCase() === "N") {
+					talk("La fonction a bien été " +  a.text.toUpperCase() === "O" ? "réa"  : "désa" + "ctivée")
+					a.text.toUpperCase() === "O" && (notif = 1)
 					Moderation[c.authId].change = 0
 					Moderation[c.authId].tentative = 0
 				}
@@ -2024,7 +1887,7 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 					Moderation[c.authId].change = 0
 					Moderation[c.authId].tentative = 0
 				}
-			} else if(Moderation[c.authId].change === 12) {
+			} else if(~[12, 13].indexOf(Moderation[c.authId].change)) {
 				if(isNaN(a.text)) {
 					talk("Ce que vous avez écrit n'est pas un nombre !")
 				} else if(Number(a.text) < 0) {
@@ -2035,18 +1898,8 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 					Moderation[c.authId].change = 0
 					Moderation[c.authId].tentative = 0
 				} 
-			}else if(Moderation[c.authId].change === 13) {
-				if(isNaN(a.text)) {
-					talk("Ce que vous avez écrit n'est pas un nombre !")
-				} else if(Number(a.text) < 0) {
-					talk("Vous ne pouvez pas inscrire un nombre négatif !")
-				} else {
-					talk("Le laps a été mis à " + a.text + " secondes.")
-					lapsfound = Number(a.text) * 1000
-					Moderation[c.authId].change = 0
-					Moderation[c.authId].tentative = 0
-				}
-			} else {
+			}/*else if(!end){
+				console.log(Moderation[c.authId].tentative, Moderation[c.authId].change, "jpp")
 				if (Moderation[c.authId].tentative == 0) {
 					talk("Nous vous rappelons que vous êtes sur le point de modifier les paramètres. (O/N)")
 					Moderation[c.authId].tentative = 1
@@ -2056,9 +1909,10 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 				} else {
 					talk("L'action a été annulée.")
 					Moderation[c.authId].tentative = 0
-					Moderation[c.authId].change = 0
+					Moderation[c.authId].change = 0 
+					Moderation[c.authId].end = 1
 				}
-			} if (end === 1) {
+			}*/ if (end === 1) {
 				if(AvertissementStockes[c.authId].role === "Administrator") {
 					if(a.text === "O") {
 						talk("Vous êtes sur le point de détruire mon programme... êtes-vous vraiment sûr de vouloir faire ça ? (O)")
@@ -2092,68 +1946,38 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 		} 
 	})
 	channel.socket.on("removeUser", a => {
-		if (Moderation[a] != undefined) {
-			if(Moderation[a].role == "moderator") {
-				talk("Le joueur " + AvertissementStockes[a].nom + " est parti. Il était modérateur.")
-				delete Moderation[a]
-			} else if (Moderation[a].role == "host"){
-				talk("Le joueur " + AvertissementStockes[a].nom + " est parti. Il était hôte.")
-				delete Moderation[a]
-			} else {
-				talk("Le joueur " + AvertissementStockes[a].nom + " est parti. Il était administrateur.")
-			}
-		} else if (a.includes("guest:") == false) {
-			if (AvertissementStockes[a].avertissements < 3) {
-				if(notif === 1) {
-					talk("Le joueur " + AvertissementStockes[a].nom + " est parti. Il avait " + AvertissementStockes[a].avertissements + " avertissements.")
-				}
-			}
+		if (Moderation[a]) {
+			talk("Le joueur " + AvertissementStockes[a].nom + " est parti. Il était " + {moderator: "modérateur", host : "hôte", admin: "administrator"}[Moderation[a].role] + ".")
+			~["host", "moderator"].indexOf(Moderation[a].role) && delete Moderation[a]
+			
+		} else if (!a.includes("guest:") && AvertissementStockes[a].avertissements < 3 && notif) {
+			talk("Le joueur " + AvertissementStockes[a].nom + " est parti. Il avait " + AvertissementStockes[a].avertissements + " avertissements.")
 		}
 	})
 	channel.socket.on("addUser", a => {
 		let b = channel.data.usersByAuthId[a.authId]
-		if(AvertissementStockes[b.authId] != undefined) {
+		if(AvertissementStockes[b.authId]) {
 			if(AvertissementStockes[b.authId].role === "Administrator") {
 				channel.data.usersByAuthId[b.authId].role = "administrator"
 			}
-			if(AvertissementStockes[b.authId].role === "Administrator" || AvertissementStockes[b.authId].role === "moderator") {
+			if(~["Administrator", "moderator"].indexOf(AvertissementStockes[b.authId].role) || (AvertissementStockes[a.authId] && AvertissementStockes[a.authId].automod)){
 				channel.socket.emit("modUser", {displayName: b.displayName, authId: b.authId})
-			} else if(AvertissementStockes[a.authId] != undefined) {
-				if (AvertissementStockes[a.authId].automod === 1) {
-					channel.socket.emit("modUser", {displayName: a.displayName, authId: a.authId})
-				}
 			}
 		}
 		if(AvertissementStockes[b.authId] === undefined) {
-			if (a.authId.includes("guest:") === true) {
-				AvertissementStockes[b.authId] = {avertissements: 2, nom: a.displayName, role: a.role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
-			} else {
-				AvertissementStockes[b.authId] = {avertissements: 0, nom: a.displayName, role: a.role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
-				if(notif === 1) {
-					talk("Le joueur " + AvertissementStockes[b.authId].nom + " est arrivé. C'est la première fois que l'on voit ce joueur.")
-				}
-			}
+			AvertissementStockes[b.authId] = {avertissements: a.authId.includes("guest:") ? 2 : 0, nom: a.displayName, role: a.role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0};
+			(!a.authId.includes("guest:") && notif) && (talk("Le joueur " + AvertissementStockes[b.authId].nom + " est arrivé. C'est la première fois que l'on voit ce joueur."))
 		} else {
-			if(notif === 1) {
+			if(notif) {
 				talk("Le joueur " + AvertissementStockes[b.authId].nom + " est arrivé. Il avait " + AvertissementStockes[b.authId].avertissements + " avertissements stockés.")
 			}
 		}
-		if(b.authId.includes("facebook:") === true) {
-			AvertissementStockes[b.authId].connexion = "Facebook"
-		} else if (b.authId.includes("twitter:") === true) {
-			AvertissementStockes[b.authId].connexion = "Twitter"
-		} else if (b.authId.includes("google:") === true) {
-			AvertissementStockes[b.authId].connexion = "Google"
-		} else if (b.authId.includes("steam:") === true) {
-			AvertissementStockes[b.authId].connexion = "Steam"
-		} else if (b.authId.includes("twitch:") === true) {
-			AvertissementStockes[b.authId].connexion = "Twitch"
-		}
+		AvertissementStockes[b.authId].connexion = b.authId[0].toUpperCase() + b.authId.substr(1, b.authId.indexOf(":") - 1)
 	})
 	channel.socket.on("failWord", a => {
 		let b = channel.data.actorsByAuthId[a.playerAuthId]
-		if(autoban === 1) {
-			if(b.lastWord.includes("�") === true) {
+		if(autoban) {
+			if(~b.lastWord.indexOf("�")) {
 				channel.socket.emit("banUser", {displayName: b.displayName, authId: b.authId})
 				if(AvertissementStockes[a.playerAuthId].tricheur === 0) {
 					talk("Le joueur " + b.displayName + " a été détecté comme un tricheur. Il a été banni.")
@@ -2163,21 +1987,11 @@ if (app.user.role === "host" || app.user.role === "moderator") {
 		}
 	})
 	channel.socket.on("winWord", a => {
-		if(syllabeNiquée === 1) {
+		if(syllabeNiquée) {
 			let b = channel.data.actorsByAuthId[a.playerAuthId]
-			let c = []
-			syllabeUniques.forEach(function(abcd) {
-				if (b.lastWord.indexOf(abcd)>-1) { 
-					c.push(abcd)
-					AvertissementStockes[a.playerAuthId].syllabe += 1
-			}})
-			if(c === 1) {
-				talk(b.displayName + " a niqué la syllabe " + c + " ! [" + AvertissementStockes[a.playerAuthId].syllabe + "]")
-				c = []
-			} else if (c > 1) {
-				talk(b.displayName + " a niqué les syllabes " + c + " ! [" + AvertissementStockes[a.playerAuthId].syllabe + "]")
-				c = []
-			}
+			let c = syllabeUniques.filter(x=>~b.lastWord.toLowerCase().indexOf(x))
+			AvertissementStockes[a.playerAuthId].syllabe  += c.length
+			talk(b.displayName + c.length > 1 ? " a niqué les syllabes " : !c.length  ?  " a niqué la syllabe " : "" + c + " ! [" + AvertissementStockes[a.playerAuthId].syllabe + "]")
 		}
 	})
 }
@@ -2192,6 +2006,7 @@ if(app.user.role === "host") {
 }
 var i = 0
 for(i = 0; i < channel.data.users.length; i++) {
+
 	if(channel.data.users[i].authId === "google:102026776801715750701") {
 		AvertissementStockes["google:102026776801715750701"] = {avertissements: 0, nom: "Erina Nakiri", role: "Administrator", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
 		Moderation["google:102026776801715750701"] = {avertissement: 0, nom: "Erina Nakiri", authId: "google:102026776801715750701", mod: 0, joueur: "", joueurId: "", tentative: 0, role: "Administrator", unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0}
@@ -2216,28 +2031,20 @@ for(i = 0; i < channel.data.users.length; i++) {
 		} else {
 			AvertissementStockes["facebook:1132837179"] = {avertissements: 0, nom: "Yass AS", role: "host", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
 		}
-	}else {
+	} else {
 		AvertissementStockes[channel.data.users[i].authId] = {avertissements: 0, nom: channel.data.users[i].displayName, role: channel.data.users[i].role, triche: 0, automod: 0, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
 		if(channel.data.users[i].role === "host" || channel.data.users[i] === "moderator") {
 			Moderation[channel.data.users[i].authId] = {avertissement: 0, nom: channel.data.users[i].displayName, authId: channel.data.users[i].authId, mod: 0, joueur: "", joueurId: "", tentative: 0, role: channel.data.users[i].role, unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0, tricheur: 0}
 		}
 	}
-	if(channel.data.users[i].authId.includes("facebook:") === true) {
-		AvertissementStockes[channel.data.users[i].authId].connexion = "Facebook"
-	} else if (channel.data.users[i].authId.includes("twitter:") === true) {
-		AvertissementStockes[channel.data.users[i].authId].connexion = "Twitter"
-	} else if (channel.data.users[i].authId.includes("google:") === true) {
-		AvertissementStockes[channel.data.users[i].authId].connexion = "Google"
-	} else if (channel.data.users[i].authId.includes("steam:") === true) {
-		AvertissementStockes[channel.data.users[i].authId].connexion = "Steam"
-	} else if (channel.data.users[i].authId.includes("twitch:") === true) {
-		AvertissementStockes[channel.data.users[i].authId].connexion = "Twitch"
-	}
+	AvertissementStockes[channel.data.users[i].authId].connexion = channel.data.users[i].authId[0].toUpperCase() + channel.data.users[i].authId.substr(1, channel.data.users[i].authId.indexOf(":") + 1) + (channel.data.users[i].authId[0].indexOf("google") ? "+" :"")
 }
-AvertissementStockes["google:102026776801715750701"] = {avertissements: 0, nom: "Erina Nakiri", role: "Administrator", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
-Moderation["google:102026776801715750701"] = {avertissement: 0, nom: "Erina Nakiri", authId: "google:102026776801715750701", mod: 0, joueur: "", joueurId: "", tentative: 0, role: "Administrator", unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0}
-AvertissementStockes["google:104483663403961701264"] = {avertissements: 0, nom: "「 」", role: "Administrator", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
-Moderation["google:104483663403961701264"] = {avertissement: 0, nom: "「 」", authId: "google:104483663403961701264", mod: 0, joueur: "", joueurId: "", tentative: 0, role: "Administrator", unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0}
+if(1){
+	AvertissementStockes["google:102026776801715750701"] = {avertissements: 0, nom: "Erina Nakiri", role: "Administrator", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0, removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0, tricheur: 0}
+	Moderation["google:102026776801715750701"] = {avertissement: 0, nom: "Erina Nakiri", authId: "google:102026776801715750701", mod: 0, joueur: "", joueurId: "", tentative: 0, role: "Administrator", unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0}
+	AvertissementStockes["google:104483663403961701264"] = {avertissements: 0, nom: "「 」", role: "Administrator", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
+	Moderation["google:104483663403961701264"] = {avertissement: 0, nom: "「 」", authId: "google:104483663403961701264", mod: 0, joueur: "", joueurId: "", tentative: 0, role: "Administrator", unmod: 0, ban: 0, unwarn: 0, automod: 0, autounmod: 0, kick: 0, change: 0}
+}
 if(channel.data.usersByAuthId["steam:76561198837014542"] != undefined) {
 	if(channel.data.usersByAuthId["steam:76561198837014542"].role === "" || channel.data.usersByAuthId["steam:76561198837014542"].role === "moderator") {
 		AvertissementStockes["steam:76561198837014542"] = {avertissements: 0, nom: "Tempérance", role: "moderator", triche: 0, automod: 1, unknown: 0, unknownPlayer: [], unknownPlayerId: [], warn: 0, addwarn: 0,removewarn: 0, kick: 0, unkautomod: 0, mod: 0, unmod: 0, lapsguess: 0, lapsfound: 0, syllabe: 0}
